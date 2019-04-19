@@ -156,14 +156,14 @@ int main(int argc, char** argv)
                     switch(event.key.keysym.scancode){
                         //strafe left
                         case SDL_SCANCODE_A:
-                            me.x += 0.1 * cos(me.theta + PI/2);
-                            me.y += 0.1 * sin(me.theta + PI/2);
+                            me.x += 0.1 * cos(me.theta - PI/2);
+                            me.y += 0.1 * sin(me.theta - PI/2);
                             break;
 
                         //strafe right
                         case SDL_SCANCODE_D:
-                            me.x += 0.1 * cos(me.theta - PI/2);
-                            me.y += 0.1 * sin(me.theta - PI/2);
+                            me.x += 0.1 * cos(me.theta + PI/2);
+                            me.y += 0.1 * sin(me.theta + PI/2);
                             break;
 
                         // walk forward

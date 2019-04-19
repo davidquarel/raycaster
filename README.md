@@ -2,7 +2,7 @@
 
 Raycaster in C by David Quarel
 
-![Picture of Raycaster][images/raycaster.png]
+![Picture of Raycaster](img/raycaster.png)
 
 # Dependencies
 ```
