@@ -2,6 +2,8 @@
 
 Raycaster in C by David Quarel
 
+![Picture of Raycaster][images/raycaster.png]
+
 # Dependencies
 ```
 sudo apt-get install libsdl2-dev 
