@@ -9,15 +9,16 @@ sudo apt-get install libsdl2-dev
 
 # How to run
 Run the makefile with `make`.
+
 Run `./bin/ray`
 
 # How to play
-W - Move Forward
-S - Move backward
-A - Strafe left
-D - Strafe right
-LEFT - Rotate left
-RIGHT - Rotate right
+* W - Move Forward
+* S - Move backward
+* A - Strafe left
+* D - Strafe right
+* LEFT - Rotate left
+* RIGHT - Rotate right
 
 # TODO
 * Algorithm to cast rays is inefficient, and takes little 0.01 steps
