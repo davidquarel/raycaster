@@ -1,6 +1,6 @@
 # raycaster
 
-Raycaster in C
+Raycaster in C by David Quarel
 
 # Dependencies
 ```
