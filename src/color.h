@@ -1,0 +1,1 @@
+int dist_to_color(double dist);

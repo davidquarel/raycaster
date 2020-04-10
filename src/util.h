@@ -1,0 +1,15 @@
+#ifndef UTIL_HEADER
+#define UTIL_HEADER
+
+#include "types.h"
+
+static const double PI = 3.14159265358979;
+
+int min(int a, int b);
+int max(int a, int b);
+double euclid_dist(Coord p, Coord q);
+Coord addc(Coord p, Coord q);
+Coord subc(Coord p, Coord q);
+Coord rotatec(Coord p, double theta); // rotate by theta about origin
+Coord rotate_about(Coord q, Coord p, double theta); //rotate q about p by theta
+#endif
