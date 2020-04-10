@@ -37,4 +37,5 @@ and look using the mouse.
 * Learn how to and then implement texture mapping. ~~Grey walls are boring~~ Stripey
 walls are less boring.
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
-
+* Add collisions with walls
+* Add something for the player to interact with (items, monsters)
