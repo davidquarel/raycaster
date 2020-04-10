@@ -34,7 +34,7 @@ maths to make it fast.
 * Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
 it to run at 30/60fps, and you hold WASD to constantly move in that direction,
 and look using the mouse.
-* Learn how to and then implement texture mapping. ~Grey walls are boring~ Stripey
+* Learn how to and then implement texture mapping. ~~Grey walls are boring~~ Stripey
 walls are less boring.
-* Add the ability for the minimap to draw the rays that have been cast
+* ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
 

@@ -21,9 +21,14 @@ typedef struct {
     Coord pos;
     double theta;
     double fov;
-    bool mm_toggle;
-    int mm_size;
 } Player;
+
+typedef struct {
+	Map* map;
+	Player* me;
+	bool mm_toggle;
+    int mm_size;
+} Game;
 
 
 #endif

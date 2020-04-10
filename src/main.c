@@ -30,6 +30,15 @@ int main(int argc, char** argv)
                 .height = 8,
                 .world = &world};
 
+    Player me = {.pos = {.x = 1.5, .y = 1.5}, 
+                 .theta = PI/6.0, 
+                 .fov = (PI/180.0) * 90};
+
+    Game game = {.map = &map,
+                .me = &me,
+                .mm_toggle = true,
+                .mm_size = 40};
+
     // took some SDL boilerplate from the SDL wiki
     // https://wiki.libsdl.org/
     SDL_Event event;
@@ -42,14 +51,6 @@ int main(int argc, char** argv)
     SDL_RenderClear(renderer);
     
 
-
-   
-
-    Player me = {.pos = {.x = 1.5, .y = 1.5}, 
-                 .theta = PI/6.0, 
-                 .fov = (PI/180.0) * 90,
-                 .mm_toggle = true,
-                 .mm_size = 40};
     
     
 
@@ -124,8 +125,8 @@ int main(int argc, char** argv)
             
         }
 
-        if(me.mm_size)
-            draw_minimap(renderer, &me, &map, rayhit, WINDOW_WIDTH);
+        if(game.mm_toggle)
+            draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
 
         
 
@@ -136,13 +137,13 @@ int main(int argc, char** argv)
             me.pos.y, 
             (180/PI)*me.theta, 
             (180/PI)*me.fov,
-            me.mm_size,
-            me.mm_toggle ? "true" : "false");
+            game.mm_size,
+            game.mm_toggle ? "true" : "false");
 
         //TODO: game only updates upon keypress
         //Make it run at constant 60fps, use keyboard and mouse to look around
 
-        run = check_event(&event, &me);
+        run = check_event(&event, &game);
     }
     // test for quit
     SDL_DestroyRenderer(renderer);
