@@ -1,0 +1,98 @@
+Dump of assembler code for function bad_cast_ray:
+src/ray.c:
+23	{
+   0x000000000000157b <+0>:	55	push   %rbp
+   0x000000000000157c <+1>:	48 89 e5	mov    %rsp,%rbp
+   0x000000000000157f <+4>:	48 83 ec 50	sub    $0x50,%rsp
+   0x0000000000001583 <+8>:	66 48 0f 7e c1	movq   %xmm0,%rcx
+   0x0000000000001588 <+13>:	66 0f 28 c1	movapd %xmm1,%xmm0
+   0x000000000000158c <+17>:	b8 00 00 00 00	mov    $0x0,%eax
+   0x0000000000001591 <+22>:	ba 00 00 00 00	mov    $0x0,%edx
+   0x0000000000001596 <+27>:	48 89 c8	mov    %rcx,%rax
+   0x0000000000001599 <+30>:	66 48 0f 7e c2	movq   %xmm0,%rdx
+   0x000000000000159e <+35>:	48 89 45 e0	mov    %rax,-0x20(%rbp)
+   0x00000000000015a2 <+39>:	48 89 55 e8	mov    %rdx,-0x18(%rbp)
+   0x00000000000015a6 <+43>:	f2 0f 11 55 d8	movsd  %xmm2,-0x28(%rbp)
+   0x00000000000015ab <+48>:	48 89 7d d0	mov    %rdi,-0x30(%rbp)
+
+24	    Coord scan = {pos.x, pos.y};
+   0x00000000000015af <+52>:	f2 0f 10 45 e0	movsd  -0x20(%rbp),%xmm0
+   0x00000000000015b4 <+57>:	f2 0f 11 45 f0	movsd  %xmm0,-0x10(%rbp)
+   0x00000000000015b9 <+62>:	f2 0f 10 45 e8	movsd  -0x18(%rbp),%xmm0
+   0x00000000000015be <+67>:	f2 0f 11 45 f8	movsd  %xmm0,-0x8(%rbp)
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x00000000000015c3 <+72>:	eb 6c	jmp    0x1631 <bad_cast_ray+182>
+
+26	    {
+27	        scan.x += STEP_SIZE * cos(theta);
+   0x00000000000015c5 <+74>:	f2 0f 10 5d f0	movsd  -0x10(%rbp),%xmm3
+   0x00000000000015ca <+79>:	f2 0f 11 5d c0	movsd  %xmm3,-0x40(%rbp)
+   0x00000000000015cf <+84>:	48 8b 45 d8	mov    -0x28(%rbp),%rax
+   0x00000000000015d3 <+88>:	48 89 45 b8	mov    %rax,-0x48(%rbp)
+   0x00000000000015d7 <+92>:	f2 0f 10 45 b8	movsd  -0x48(%rbp),%xmm0
+   0x00000000000015dc <+97>:	e8 5f f9 ff ff	callq  0xf40 <cos@plt>
+   0x00000000000015e1 <+102>:	66 0f 28 c8	movapd %xmm0,%xmm1
+   0x00000000000015e5 <+106>:	f2 0f 10 05 8b 18 00 00	movsd  0x188b(%rip),%xmm0        # 0x2e78
+   0x00000000000015ed <+114>:	f2 0f 59 c1	mulsd  %xmm1,%xmm0
+   0x00000000000015f1 <+118>:	f2 0f 58 45 c0	addsd  -0x40(%rbp),%xmm0
+   0x00000000000015f6 <+123>:	f2 0f 11 45 f0	movsd  %xmm0,-0x10(%rbp)
+
+28	        scan.y += STEP_SIZE * sin(theta);
+   0x00000000000015fb <+128>:	f2 0f 10 65 f8	movsd  -0x8(%rbp),%xmm4
+   0x0000000000001600 <+133>:	f2 0f 11 65 c0	movsd  %xmm4,-0x40(%rbp)
+   0x0000000000001605 <+138>:	48 8b 45 d8	mov    -0x28(%rbp),%rax
+   0x0000000000001609 <+142>:	48 89 45 b8	mov    %rax,-0x48(%rbp)
+   0x000000000000160d <+146>:	f2 0f 10 45 b8	movsd  -0x48(%rbp),%xmm0
+   0x0000000000001612 <+151>:	e8 a9 f7 ff ff	callq  0xdc0 <sin@plt>
+   0x0000000000001617 <+156>:	66 0f 28 c8	movapd %xmm0,%xmm1
+   0x000000000000161b <+160>:	f2 0f 10 05 55 18 00 00	movsd  0x1855(%rip),%xmm0        # 0x2e78
+   0x0000000000001623 <+168>:	f2 0f 59 c1	mulsd  %xmm1,%xmm0
+   0x0000000000001627 <+172>:	f2 0f 58 45 c0	addsd  -0x40(%rbp),%xmm0
+   0x000000000000162c <+177>:	f2 0f 11 45 f8	movsd  %xmm0,-0x8(%rbp)
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x0000000000001631 <+182>:	f2 0f 10 45 f8	movsd  -0x8(%rbp),%xmm0
+   0x0000000000001636 <+187>:	66 0f 2e 05 42 18 00 00	ucomisd 0x1842(%rip),%xmm0        # 0x2e80
+   0x000000000000163e <+195>:	73 07	jae    0x1647 <bad_cast_ray+204>
+   0x0000000000001640 <+197>:	f2 48 0f 2c c0	cvttsd2si %xmm0,%rax
+   0x0000000000001645 <+202>:	eb 1e	jmp    0x1665 <bad_cast_ray+234>
+   0x0000000000001647 <+204>:	f2 0f 10 0d 31 18 00 00	movsd  0x1831(%rip),%xmm1        # 0x2e80
+   0x000000000000164f <+212>:	f2 0f 5c c1	subsd  %xmm1,%xmm0
+   0x0000000000001653 <+216>:	f2 48 0f 2c c0	cvttsd2si %xmm0,%rax
+   0x0000000000001658 <+221>:	48 ba 00 00 00 00 00 00 00 80	movabs $0x8000000000000000,%rdx
+   0x0000000000001662 <+231>:	48 31 d0	xor    %rdx,%rax
+   0x0000000000001665 <+234>:	48 8d 14 c5 00 00 00 00	lea    0x0(,%rax,8),%rdx
+   0x000000000000166d <+242>:	48 8b 45 d0	mov    -0x30(%rbp),%rax
+   0x0000000000001671 <+246>:	48 01 d0	add    %rdx,%rax
+   0x0000000000001674 <+249>:	48 8b 10	mov    (%rax),%rdx
+   0x0000000000001677 <+252>:	f2 0f 10 45 f0	movsd  -0x10(%rbp),%xmm0
+   0x000000000000167c <+257>:	66 0f 2e 05 fc 17 00 00	ucomisd 0x17fc(%rip),%xmm0        # 0x2e80
+   0x0000000000001684 <+265>:	73 07	jae    0x168d <bad_cast_ray+274>
+   0x0000000000001686 <+267>:	f2 48 0f 2c c0	cvttsd2si %xmm0,%rax
+   0x000000000000168b <+272>:	eb 1e	jmp    0x16ab <bad_cast_ray+304>
+   0x000000000000168d <+274>:	f2 0f 10 0d eb 17 00 00	movsd  0x17eb(%rip),%xmm1        # 0x2e80
+   0x0000000000001695 <+282>:	f2 0f 5c c1	subsd  %xmm1,%xmm0
+   0x0000000000001699 <+286>:	f2 48 0f 2c c0	cvttsd2si %xmm0,%rax
+   0x000000000000169e <+291>:	48 b9 00 00 00 00 00 00 00 80	movabs $0x8000000000000000,%rcx
+   0x00000000000016a8 <+301>:	48 31 c8	xor    %rcx,%rax
+   0x00000000000016ab <+304>:	48 01 d0	add    %rdx,%rax
+   0x00000000000016ae <+307>:	0f b6 00	movzbl (%rax),%eax
+   0x00000000000016b1 <+310>:	3c 23	cmp    $0x23,%al
+   0x00000000000016b3 <+312>:	0f 85 0c ff ff ff	jne    0x15c5 <bad_cast_ray+74>
+
+29	    }
+30	
+31	    return scan;
+   0x00000000000016b9 <+318>:	48 8b 45 f0	mov    -0x10(%rbp),%rax
+   0x00000000000016bd <+322>:	48 8b 55 f8	mov    -0x8(%rbp),%rdx
+   0x00000000000016c1 <+326>:	48 89 45 c0	mov    %rax,-0x40(%rbp)
+   0x00000000000016c5 <+330>:	48 89 55 c8	mov    %rdx,-0x38(%rbp)
+   0x00000000000016c9 <+334>:	66 0f 6f 45 c0	movdqa -0x40(%rbp),%xmm0
+   0x00000000000016ce <+339>:	48 89 55 c0	mov    %rdx,-0x40(%rbp)
+   0x00000000000016d2 <+343>:	f2 0f 10 4d c0	movsd  -0x40(%rbp),%xmm1
+
+32	}
+   0x00000000000016d7 <+348>:	c9	leaveq 
+   0x00000000000016d8 <+349>:	c3	retq   
+End of assembler dump.
