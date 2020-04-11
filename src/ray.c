@@ -3,6 +3,7 @@
 #include "types.h"
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #define STEP_SIZE 0.001
 
 //double steps = 0;
@@ -29,6 +30,58 @@ Coord bad_cast_ray(Coord pos, double theta, World world)
     }
 
     return scan;
+}
+
+Coord cast_ray(Coord pos, double theta, World world)
+{
+    Coord u = pos;
+    int stepX = (cos(theta) >= 0) ? 1 : -1;
+    int stepY = (sin(theta) >= 0) ? 1 : -1;
+    int x = (int) u.x;
+    int y = (int) u.y;
+    double t;
+    Coord hit;
+    double tMaxX;
+    double tMaxY;
+    double deltaX = fabs(1 / cos(theta));
+    double deltaY = fabs(1 / sin(theta));
+    bool fromX = true;
+
+    if(stepX == 1) 
+        tMaxX = fabs( (ceil(u.x) - u.x) * deltaX);
+    else
+        tMaxX = fabs( (floor(u.x) - u.x) * deltaX);
+
+    if(stepY == 1)
+        tMaxY = fabs( (ceil(u.y) - u.y) * deltaY);
+    else
+        tMaxY = fabs( (floor(u.y) - u.y) * deltaY);
+
+    while(world[y][x] != '#')
+    {
+        if(tMaxX < tMaxY)
+        {
+            tMaxX += deltaX;
+            x += stepX;
+            fromX = true;
+        }
+        else
+        {
+            tMaxY += deltaY;
+            y += stepY;
+            fromX = false;
+        }
+    }
+
+    if(fromX)
+        t = tMaxX - deltaX;
+    else
+        t = tMaxY - deltaY;
+
+    hit.x = u.x + t*cos(theta);
+    hit.y = u.y + t*sin(theta);
+    //printf("hit %.2f %2f\n, dist %.2f", hit.x, hit.y, t);
+    return hit;
 }
 
 //Coord cast_ray(Coord pos, double theta, World world){
