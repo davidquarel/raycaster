@@ -33,9 +33,9 @@ Run `./bin/ray`
 * KEYPAD_6 - move minimap right
 
 # TODO
-* Algorithm to cast rays is inefficient, and takes little 0.01 steps
+* ~~Algorithm to cast rays is inefficient, and takes little 0.01 steps
 forward till it hits a wall. Use Bresenhams line algorithm and some
-maths to make it fast.
+maths to make it fast.~~ DONE
 * Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
 it to run at 30/60fps, and you hold WASD to constantly move in that direction,
 and look using the mouse.
