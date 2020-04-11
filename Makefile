@@ -12,7 +12,6 @@ DUMPFILE    = dump/ray-disasm
 
 default: all
 
-
 dump: $(DUMPFILE)
 
 $(DUMPFILE):
@@ -29,7 +28,3 @@ $(TARGET): $(OBJFILES)
 
 clean:
 	rm -f $(OBJFILES) $(TARGET) $(DUMPFILE)
-
-
-
-

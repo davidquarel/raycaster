@@ -24,6 +24,7 @@ typedef struct {
 } Player;
 
 typedef struct {
+    Coord mm_offset;
 	Map* map;
 	Player* me;
 	bool mm_toggle;
