@@ -28,6 +28,9 @@ typedef struct {
 	Player* me;
 	bool mm_toggle;
     int mm_size;
+    bool run;
+    int window_width;
+    int window_height;
 } Game;
 
 

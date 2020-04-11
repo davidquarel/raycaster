@@ -3,7 +3,7 @@
 #include "types.h"
 #include <math.h>
 #include <stdlib.h>
-#define STEP_SIZE 0.01
+#define STEP_SIZE 0.001
 
 //double steps = 0;
 

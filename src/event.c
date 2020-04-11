@@ -3,10 +3,9 @@
 #include "util.h"
 
 // is this a pointer???
-bool check_event(SDL_Event* eventptr, Game* gptr)
+void check_event(SDL_Event* eventptr, Game* gptr)
 {
     SDL_Event event = *eventptr;
-	bool run = true;
  	bool wait = true;
     while(wait)
     {
@@ -17,7 +16,7 @@ bool check_event(SDL_Event* eventptr, Game* gptr)
         {
 
             case SDL_QUIT:
-                run = false;
+                gptr -> run = false;
                 wait = false;
                 break;
 
@@ -99,5 +98,4 @@ bool check_event(SDL_Event* eventptr, Game* gptr)
                 break;
         }
     }
-    return run;
 }

@@ -2,4 +2,4 @@
 #include <stdbool.h>
 #include "types.h"
 
-bool check_event(SDL_Event* eventptr, Game* gptr);
+void check_event(SDL_Event* eventptr, Game* gptr);

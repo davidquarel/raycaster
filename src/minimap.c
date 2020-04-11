@@ -35,7 +35,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
         }
     }
 
-    Player me = *(gptr -> me);
+    Player me = *(gptr->me);
 
 
     // draw rays
