@@ -1,0 +1,105 @@
+Dump of assembler code for function bad_cast_ray:
+src/ray.c:
+23	{
+   0x00000000000015e0 <+0>:	53	push   %rbx
+
+24	    Coord scan = {pos.x, pos.y};
+   0x00000000000015e1 <+1>:	c5 f9 28 d8	vmovapd %xmm0,%xmm3
+
+23	{
+   0x00000000000015e5 <+5>:	48 89 fb	mov    %rdi,%rbx
+   0x00000000000015e8 <+8>:	48 83 ec 30	sub    $0x30,%rsp
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x00000000000015ec <+12>:	c5 fb 10 25 cc 0c 00 00	vmovsd 0xccc(%rip),%xmm4        # 0x22c0
+   0x00000000000015f4 <+20>:	c5 f9 2e cc	vucomisd %xmm4,%xmm1
+   0x00000000000015f8 <+24>:	0f 83 e2 00 00 00	jae    0x16e0 <bad_cast_ray+256>
+   0x00000000000015fe <+30>:	c5 f9 2e c4	vucomisd %xmm4,%xmm0
+   0x0000000000001602 <+34>:	c4 e1 fb 2c d1	vcvttsd2si %xmm1,%rdx
+   0x0000000000001607 <+39>:	0f 83 f3 00 00 00	jae    0x1700 <bad_cast_ray+288>
+   0x000000000000160d <+45>:	c4 e1 fb 2c c0	vcvttsd2si %xmm0,%rax
+   0x0000000000001612 <+50>:	48 8b 14 d3	mov    (%rbx,%rdx,8),%rdx
+   0x0000000000001616 <+54>:	c5 fb 11 64 24 08	vmovsd %xmm4,0x8(%rsp)
+   0x000000000000161c <+60>:	80 3c 02 23	cmpb   $0x23,(%rdx,%rax,1)
+   0x0000000000001620 <+64>:	0f 84 aa 00 00 00	je     0x16d0 <bad_cast_ray+240>
+   0x0000000000001626 <+70>:	c5 f9 28 c2	vmovapd %xmm2,%xmm0
+   0x000000000000162a <+74>:	48 8d 7c 24 28	lea    0x28(%rsp),%rdi
+   0x000000000000162f <+79>:	48 8d 74 24 20	lea    0x20(%rsp),%rsi
+   0x0000000000001634 <+84>:	c5 fb 11 4c 24 18	vmovsd %xmm1,0x18(%rsp)
+   0x000000000000163a <+90>:	c5 fb 11 5c 24 10	vmovsd %xmm3,0x10(%rsp)
+   0x0000000000001640 <+96>:	e8 4b f8 ff ff	callq  0xe90 <sincos@plt>
+
+26	    {
+27	        scan.x += STEP_SIZE * cos(theta);
+   0x0000000000001645 <+101>:	c5 fb 10 15 7b 0c 00 00	vmovsd 0xc7b(%rip),%xmm2        # 0x22c8
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x000000000000164d <+109>:	48 b9 00 00 00 00 00 00 00 80	movabs $0x8000000000000000,%rcx
+   0x0000000000001657 <+119>:	c5 fb 10 64 24 08	vmovsd 0x8(%rsp),%xmm4
+
+26	    {
+27	        scan.x += STEP_SIZE * cos(theta);
+   0x000000000000165d <+125>:	c5 eb 59 6c 24 20	vmulsd 0x20(%rsp),%xmm2,%xmm5
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x0000000000001663 <+131>:	c5 fb 10 4c 24 18	vmovsd 0x18(%rsp),%xmm1
+
+28	        scan.y += STEP_SIZE * sin(theta);
+   0x0000000000001669 <+137>:	c5 eb 59 54 24 28	vmulsd 0x28(%rsp),%xmm2,%xmm2
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x000000000000166f <+143>:	c5 fb 10 5c 24 10	vmovsd 0x10(%rsp),%xmm3
+   0x0000000000001675 <+149>:	eb 23	jmp    0x169a <bad_cast_ray+186>
+   0x0000000000001677 <+151>:	66 0f 1f 84 00 00 00 00 00	nopw   0x0(%rax,%rax,1)
+   0x0000000000001680 <+160>:	c5 f9 2e dc	vucomisd %xmm4,%xmm3
+   0x0000000000001684 <+164>:	c4 e1 fb 2c d1	vcvttsd2si %xmm1,%rdx
+   0x0000000000001689 <+169>:	73 2f	jae    0x16ba <bad_cast_ray+218>
+   0x000000000000168b <+171>:	c4 e1 fb 2c c3	vcvttsd2si %xmm3,%rax
+   0x0000000000001690 <+176>:	48 8b 14 d3	mov    (%rbx,%rdx,8),%rdx
+   0x0000000000001694 <+180>:	80 3c 02 23	cmpb   $0x23,(%rdx,%rax,1)
+   0x0000000000001698 <+184>:	74 36	je     0x16d0 <bad_cast_ray+240>
+
+28	        scan.y += STEP_SIZE * sin(theta);
+   0x000000000000169a <+186>:	c5 f3 58 ca	vaddsd %xmm2,%xmm1,%xmm1
+
+27	        scan.x += STEP_SIZE * cos(theta);
+   0x000000000000169e <+190>:	c5 e3 58 dd	vaddsd %xmm5,%xmm3,%xmm3
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x00000000000016a2 <+194>:	c5 f9 2e cc	vucomisd %xmm4,%xmm1
+   0x00000000000016a6 <+198>:	72 d8	jb     0x1680 <bad_cast_ray+160>
+   0x00000000000016a8 <+200>:	c5 f3 5c c4	vsubsd %xmm4,%xmm1,%xmm0
+   0x00000000000016ac <+204>:	c4 e1 fb 2c d0	vcvttsd2si %xmm0,%rdx
+   0x00000000000016b1 <+209>:	48 31 ca	xor    %rcx,%rdx
+   0x00000000000016b4 <+212>:	c5 f9 2e dc	vucomisd %xmm4,%xmm3
+   0x00000000000016b8 <+216>:	72 d1	jb     0x168b <bad_cast_ray+171>
+   0x00000000000016ba <+218>:	c5 e3 5c c4	vsubsd %xmm4,%xmm3,%xmm0
+   0x00000000000016be <+222>:	48 8b 14 d3	mov    (%rbx,%rdx,8),%rdx
+   0x00000000000016c2 <+226>:	c4 e1 fb 2c c0	vcvttsd2si %xmm0,%rax
+   0x00000000000016c7 <+231>:	48 31 c8	xor    %rcx,%rax
+   0x00000000000016ca <+234>:	80 3c 02 23	cmpb   $0x23,(%rdx,%rax,1)
+   0x00000000000016ce <+238>:	75 ca	jne    0x169a <bad_cast_ray+186>
+
+29	    }
+30	
+31	    return scan;
+32	}
+   0x00000000000016d0 <+240>:	48 83 c4 30	add    $0x30,%rsp
+   0x00000000000016d4 <+244>:	c5 f9 28 c3	vmovapd %xmm3,%xmm0
+   0x00000000000016d8 <+248>:	5b	pop    %rbx
+   0x00000000000016d9 <+249>:	c3	retq   
+   0x00000000000016da <+250>:	66 0f 1f 44 00 00	nopw   0x0(%rax,%rax,1)
+
+25	    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+   0x00000000000016e0 <+256>:	c5 f3 5c f4	vsubsd %xmm4,%xmm1,%xmm6
+   0x00000000000016e4 <+260>:	48 b8 00 00 00 00 00 00 00 80	movabs $0x8000000000000000,%rax
+   0x00000000000016ee <+270>:	c4 e1 fb 2c d6	vcvttsd2si %xmm6,%rdx
+   0x00000000000016f3 <+275>:	48 31 c2	xor    %rax,%rdx
+   0x00000000000016f6 <+278>:	c5 f9 2e c4	vucomisd %xmm4,%xmm0
+   0x00000000000016fa <+282>:	0f 82 0d ff ff ff	jb     0x160d <bad_cast_ray+45>
+   0x0000000000001700 <+288>:	c5 fb 5c ec	vsubsd %xmm4,%xmm0,%xmm5
+   0x0000000000001704 <+292>:	48 b9 00 00 00 00 00 00 00 80	movabs $0x8000000000000000,%rcx
+   0x000000000000170e <+302>:	c4 e1 fb 2c c5	vcvttsd2si %xmm5,%rax
+   0x0000000000001713 <+307>:	48 31 c8	xor    %rcx,%rax
+   0x0000000000001716 <+310>:	e9 f7 fe ff ff	jmpq   0x1612 <bad_cast_ray+50>
+End of assembler dump.
