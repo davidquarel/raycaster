@@ -1,5 +1,5 @@
-#ifndef MINIMAP_HEADER
-#define MINIMAP_HEADER
+#ifndef _MINIMAP_H
+#define _MINIMAP_H
 
 #include "types.h"
 #include <SDL2/SDL_render.h>

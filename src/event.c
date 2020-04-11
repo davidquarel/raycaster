@@ -5,6 +5,8 @@
 // is this a pointer???
 void check_event(SDL_Event* eventptr, Game* gptr)
 {
+    double tmp;
+    Coord cpos;
     SDL_Event event = *eventptr;
  	bool wait = true;
     while(wait)
@@ -28,36 +30,56 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                 switch(event.key.keysym.scancode){
                     //strafe left
                     case SDL_SCANCODE_A:
-                        gptr -> me->pos.x += 0.1 * cos(gptr -> me->theta - PI/2);
-                        gptr -> me->pos.y += 0.1 * sin(gptr -> me->theta - PI/2);
+                        cpos = gptr -> me -> pos;
+                        cpos.x += 0.1 * cos(gptr -> me->theta - PI/2);
+                        cpos.y += 0.1 * sin(gptr -> me->theta - PI/2);
+                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                            gptr -> me -> pos = cpos;
                         break;
 
                     //strafe right
                     case SDL_SCANCODE_D:
-                        gptr -> me->pos.x += 0.1 * cos(gptr -> me->theta + PI/2);
-                        gptr -> me->pos.y += 0.1 * sin(gptr -> me->theta + PI/2);
+                        cpos = gptr -> me -> pos;
+                        cpos.x += 0.1 * cos(gptr -> me->theta + PI/2);
+                        cpos.y += 0.1 * sin(gptr -> me->theta + PI/2);
+                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                            gptr -> me -> pos = cpos;
                         break;
 
                     // walk forward
                     case SDL_SCANCODE_W:
-                        gptr -> me->pos.x += 0.1 * cos(gptr -> me->theta);
-                        gptr -> me->pos.y += 0.1 * sin(gptr -> me->theta);
+                        cpos = gptr -> me -> pos;
+                        cpos.x += 0.1 * cos(gptr -> me->theta);
+                        cpos.y += 0.1 * sin(gptr -> me->theta);
+                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                            gptr -> me -> pos = cpos;
                         break;
 
                     // walk backward
                     case SDL_SCANCODE_S:
-                        gptr -> me->pos.x -= 0.1 * cos(gptr -> me->theta);
-                        gptr -> me->pos.y -= 0.1 * sin(gptr -> me->theta);
+                        cpos = gptr -> me -> pos;
+                        cpos.x -= 0.1 * cos(gptr -> me->theta);
+                        cpos.y -= 0.1 * sin(gptr -> me->theta);
+                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                            gptr -> me -> pos = cpos;
                         break;
 
                     // rotate left
                     case SDL_SCANCODE_LEFT:
-                        gptr -> me->theta -= 0.1;
+                        tmp = gptr -> me -> theta;
+                        tmp -= 0.1;
+                        if (tmp < 0)
+                            tmp += 2*PI;
+                        tmp = fmod(tmp, 2*PI);
+
+                        gptr -> me -> theta = tmp;
                         break;
 
                     // rotate right
                     case SDL_SCANCODE_RIGHT:
-                        gptr -> me->theta += 0.1;
+                        tmp = gptr -> me -> theta;
+                        tmp = fmod(tmp + 0.1, 2*PI);
+                        gptr -> me -> theta = tmp;
                         break;
 
                     // decrease FOV
@@ -88,6 +110,11 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                     case SDL_SCANCODE_L:
                         gptr -> mm_size += 5;
                         break; 
+
+                    // toggle status
+                    case SDL_SCANCODE_P:
+                        gptr -> status_toggle = !gptr -> status_toggle;
+                        break;
 
                     default:
                         break;

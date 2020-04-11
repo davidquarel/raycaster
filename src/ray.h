@@ -1,5 +1,5 @@
-#ifndef RAY_HEADER
-#define RAY_HEADER
+#ifndef _RAY_H
+#define _RAY_H
 
 #include "types.h"
 

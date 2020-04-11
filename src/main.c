@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 #include "types.h"
 #include "util.h"
 
@@ -34,6 +37,7 @@ int main(void) //int argc, char** argv)
     Game game = {.map = &map,
                 .me = &me,
                 .mm_toggle = true,
+                .status_toggle = true,
                 .mm_size = 40,
                 .run = true,
                 .window_width = 640,
@@ -53,11 +57,18 @@ int main(void) //int argc, char** argv)
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
     
+    TTF_Init();
+    TTF_Font* font = TTF_OpenFont("font/Hack-Regular.ttf", 14);
+    if(font == NULL)
+    {
+        printf("Failed to load font.\n");
+        return EXIT_FAILURE;
+    }
 
     // this will be used for drawing rays
     // on the minimap
     Coord rayhit[WINDOW_WIDTH];
-    
+    char status_buf[120];    
 
     while(game.run)
     {
@@ -68,9 +79,11 @@ int main(void) //int argc, char** argv)
         if(game.mm_toggle)
             draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
 
+        print_game_status(&game, status_buf);
+        printf("%s\n", status_buf);
+        if(game.status_toggle)
+            draw_status(renderer, font, &game, status_buf);
         SDL_RenderPresent(renderer);
-     
-        print_game_status(&game);
 
         //TODO: game only updates upon keypress
         //Make it run at constant 60fps, use keyboard and mouse to look around
@@ -80,6 +93,9 @@ int main(void) //int argc, char** argv)
     // test for quit
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    //SDL_DestroyTexture(texture);
+    //SDL_FreeSurface(surface);
+    TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
 }

@@ -5,10 +5,22 @@
 #include "color.h"
 #include "minimap.h"
 
-// void draw_status(SDL_Renderer* renderer, Game* gptr)
-// {
-    
-// }
+void draw_status(SDL_Renderer* renderer, TTF_Font* font, Game* gptr, char* str)
+{
+    int WINDOW_WIDTH = gptr -> window_width;
+
+    // draw some text
+    // http://gigi.nullneuron.net/gigilabs/displaying-text-in-sdl2-with-sdl_ttf/
+    SDL_Color white = {255,255,255,128};
+    SDL_Surface* status = TTF_RenderText_Blended_Wrapped(font, str, white, WINDOW_WIDTH / 4);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, status);
+    int texW = 0;
+    int texH = 0;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+    SDL_Rect dstrect = {3* WINDOW_WIDTH / 4, 0, texW, texH};
+    SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+
+}
 
 void draw_background(SDL_Renderer* renderer, Game* gptr)
 {

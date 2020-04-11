@@ -1,4 +1,4 @@
-CFLAGS=-O2 -Wall -Wextra -Wpedantic --std=c99 -lSDL2 -lm
+CFLAGS=-O2 -Wall -Wextra -Wpedantic --std=c99 -lSDL2 -lSDL2_ttf -lm
 
 default: all
 

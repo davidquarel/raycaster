@@ -6,7 +6,7 @@ Raycaster in C by David Quarel
 
 # Dependencies
 ```
-sudo apt-get install libsdl2-dev 
+sudo apt-get install libsdl2-dev libsdl2-ttf-dev
 ```
 
 # How to run
@@ -26,6 +26,7 @@ Run `./bin/ray`
 * M - toggle minimap
 * K - increase minimap size
 * L - decrease minimap size
+* P - toggle show game status
 
 # TODO
 * Algorithm to cast rays is inefficient, and takes little 0.01 steps
@@ -37,5 +38,5 @@ and look using the mouse.
 * Learn how to and then implement texture mapping. ~~Grey walls are boring~~ Stripey
 walls are less boring.
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
-* Add collisions with walls
+* ~~Add collisions with walls~~ DONE
 * Add something for the player to interact with (items, monsters)

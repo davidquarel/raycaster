@@ -19,13 +19,15 @@
             // assupos 0 <= theta <= 45 degrees
             // thus 0 <= m  <= 1
 
-Coord bad_cast_ray(Coord pos, double theta, World world){
+Coord bad_cast_ray(Coord pos, double theta, World world)
+{
     Coord scan = {pos.x, pos.y};
-    while( world[(int) scan.x][(int) scan.y] != '#')
-        {
-            scan.x += STEP_SIZE * cos(theta);
-            scan.y += STEP_SIZE * sin(theta);
-        }
+    while (world[(size_t) scan.x][(size_t) scan.y] != '#')
+    {
+        scan.x += STEP_SIZE * cos(theta);
+        scan.y += STEP_SIZE * sin(theta);
+    }
+
     return scan;
 }
 

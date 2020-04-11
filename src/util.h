@@ -1,5 +1,5 @@
-#ifndef UTIL_HEADER
-#define UTIL_HEADER
+#ifndef _UTIL_H
+#define _UTIL_H
 
 #include "types.h"
 

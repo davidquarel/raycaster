@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include "util.h"
 
-void print_game_status(Game* gptr)
+void print_game_status(Game* gptr, char* str)
 {
-	printf("x: %f, y: %f, theta: %f, fov: %f, mmscale: %d, mm: %s\n", 
+	sprintf(str, "x:      %.2f\ny:      %.2f\ntheta: %.2f\nfov:   %.0f\nmmscale: %d\nmm: %s\n", 
             gptr -> me -> pos.x, 
             gptr -> me -> pos.y, 
             (gptr -> me -> theta) * (180/PI), 
