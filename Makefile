@@ -1,15 +1,25 @@
-CFLAGS=-O2 -Wall -Wextra -Wpedantic --std=c99 -lSDL2 -lSDL2_ttf -lm
+CC         = gcc
+CFLAGS     = -Wall --std=c99 -O2 -mavx ##Remove the -mavx if you're compiling for a literal dinosaur
+DEBUGFLAGS = -g 
+LDFLAGS    = -lSDL2 -lSDL2_ttf -lm
+OBJFILES   = $(patsubst %.c,%.o,$(wildcard ./src/*.c))
+TARGET     = bin/ray
+
+#$(info Compiling these objects\: [${OBJFILES}])
+
+debug: CFLAGS += $(DEBUGFLAGS)
+debug: all
+
+all: $(TARGET)
+
+$(TARGET): $(OBJFILES)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
+
+
+clean:
+	rm -f $(OBJFILES) $(TARGET) 
 
 default: all
 
-all: bin/ray
-
-remake: clean all
-
-bin/ray: src/*.c
-	gcc src/*.c $(CFLAGS) -o bin/ray
-
-clean:
-	rm -f bin/*
 
 
