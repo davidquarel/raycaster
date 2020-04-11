@@ -56,8 +56,7 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 
     for (int col = 0; col < WINDOW_WIDTH; col++)
     {
-        
-        Coord ray_collide = bad_cast_ray(me.pos, ray_theta, *(gptr -> map -> world));
+        Coord ray_collide= bad_cast_ray(me.pos, ray_theta, *(gptr -> map -> world));
         rayhit[col] = ray_collide; //remember where ray strikes wall
         double dist = euclid_dist(me.pos, ray_collide);
 
@@ -74,7 +73,7 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 
 
         int color = dist_to_color(dist);
-       
+        SDL_SetRenderDrawColor(renderer, color,     color,  color,  0);
         // denotes how far along the current block
         //the ray struck, between 0 and 1
         double block_fraction = 
@@ -83,12 +82,6 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
         
         // TODO: Now all walls are coloured correctly with stripes.
 
-        // if(steps < thresh_close)
-        //     colour = colour_max;
-        // else if (steps > thresh_far)
-        //     colour = colour_min;
-        // else
-        //     colour = (int) ((steps - thresh_close) * grad + colour_max);
         if( ((int) (block_fraction*8)) % 2 == 0)
             SDL_SetRenderDrawColor(renderer, color, 0,      0, 0);
         else

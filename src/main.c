@@ -17,16 +17,16 @@
 int main(void) //int argc, char** argv)
 {
 
-    World world  =  {"########",
-                     "#      #",
-                     "#    # #",
-                     "### ## #",
-                     "#      #",
-                     "#  ##  #",
-                     "#      #",
-                     "########"};
+    World world  =  {"################",
+                     "#           #  #",
+                     "#    #         #",
+                     "### ##     #   #",
+                     "#         ##   #",
+                     "#  ##  #       #",
+                     "#    #   #     #",
+                     "################"};
     
-    Map map =   {.width = 8, 
+    Map map =   {.width = 16, 
                 .height = 8,
                 .world = &world};
 
@@ -55,6 +55,7 @@ int main(void) //int argc, char** argv)
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_SetWindowTitle(window, "raycaster");
     SDL_RenderClear(renderer);
     
     TTF_Init();
@@ -80,7 +81,7 @@ int main(void) //int argc, char** argv)
             draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
 
         print_game_status(&game, status_buf);
-        printf("%s\n", status_buf);
+        //printf("%s\n", status_buf);
         if(game.status_toggle)
             draw_status(renderer, font, &game, status_buf);
         SDL_RenderPresent(renderer);

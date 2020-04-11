@@ -22,7 +22,7 @@
 Coord bad_cast_ray(Coord pos, double theta, World world)
 {
     Coord scan = {pos.x, pos.y};
-    while (world[(size_t) scan.x][(size_t) scan.y] != '#')
+    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
     {
         scan.x += STEP_SIZE * cos(theta);
         scan.y += STEP_SIZE * sin(theta);

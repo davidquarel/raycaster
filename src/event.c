@@ -33,7 +33,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                         cpos = gptr -> me -> pos;
                         cpos.x += 0.1 * cos(gptr -> me->theta - PI/2);
                         cpos.y += 0.1 * sin(gptr -> me->theta - PI/2);
-                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                        if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
                             gptr -> me -> pos = cpos;
                         break;
 
@@ -42,7 +42,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                         cpos = gptr -> me -> pos;
                         cpos.x += 0.1 * cos(gptr -> me->theta + PI/2);
                         cpos.y += 0.1 * sin(gptr -> me->theta + PI/2);
-                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                        if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
                             gptr -> me -> pos = cpos;
                         break;
 
@@ -51,7 +51,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                         cpos = gptr -> me -> pos;
                         cpos.x += 0.1 * cos(gptr -> me->theta);
                         cpos.y += 0.1 * sin(gptr -> me->theta);
-                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                        if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
                             gptr -> me -> pos = cpos;
                         break;
 
@@ -60,7 +60,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                         cpos = gptr -> me -> pos;
                         cpos.x -= 0.1 * cos(gptr -> me->theta);
                         cpos.y -= 0.1 * sin(gptr -> me->theta);
-                        if( (*(gptr -> map -> world))[(int) cpos.x][(int) cpos.y] != '#')
+                        if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
                             gptr -> me -> pos = cpos;
                         break;
 
