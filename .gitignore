@@ -1,0 +1,7 @@
+src/*.o
+
+#Ignore vim swapfiles/tempfiles
+
+*.swp
+*.swo
+*~
