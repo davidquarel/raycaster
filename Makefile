@@ -1,11 +1,22 @@
-CC         = gcc
-CFLAGS     = -Wall --std=c99 -O2 -mavx ##Remove the -mavx if you're compiling for a literal dinosaur
-DEBUGFLAGS = -g 
-LDFLAGS    = -lSDL2 -lSDL2_ttf -lm
-OBJFILES   = $(patsubst %.c,%.o,$(wildcard ./src/*.c))
-TARGET     = bin/ray
+CC          = gcc
+CFLAGS      = -Wall --std=c99 -O2 -mavx ##Remove the -mavx if you're compiling for a literal dinosaur
+DEBUGFLAGS  = -ggdb3 
+LDFLAGS     = -lSDL2 -lSDL2_ttf -lm
+OBJFILES    = $(patsubst %.c,%.o,$(wildcard ./src/*.c))
+TARGET      = bin/ray
+DISASM	    = objdump
+DISASMFLAGS = -DlgCr -Mintel
+DUMPFILE    = dump/ray-disasm 
 
 #$(info Compiling these objects\: [${OBJFILES}])
+
+default: all
+
+
+dump: $(DUMPFILE)
+
+$(DUMPFILE):
+	$(DISASM) $(DISASMFLAGS) $(TARGET) > $(DUMPFILE)
 
 debug: CFLAGS += $(DEBUGFLAGS)
 debug: all
@@ -17,9 +28,8 @@ $(TARGET): $(OBJFILES)
 
 
 clean:
-	rm -f $(OBJFILES) $(TARGET) 
+	rm -f $(OBJFILES) $(TARGET) $(DUMPFILE)
 
-default: all
 
 
 
