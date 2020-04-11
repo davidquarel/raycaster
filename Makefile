@@ -7,6 +7,8 @@ TARGET     = bin/ray
 
 #$(info Compiling these objects\: [${OBJFILES}])
 
+default: all
+
 debug: CFLAGS += $(DEBUGFLAGS)
 debug: all
 
@@ -19,7 +21,7 @@ $(TARGET): $(OBJFILES)
 clean:
 	rm -f $(OBJFILES) $(TARGET) 
 
-default: all
+
 
 
 

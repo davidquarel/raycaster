@@ -17,6 +17,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
 
     World* worldptr = gptr -> map -> world;
 
+    Coord off = gptr -> mm_offset;
 
     // draw world
     SDL_Rect wall;
@@ -28,14 +29,15 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
         {
             if((*worldptr)[y][x] == '#')
             {
-                wall.x = x * MM_SIZE;
-                wall.y = y * MM_SIZE;
+                wall.x = (x + off.x) * MM_SIZE;
+                wall.y = (y + off.y) * MM_SIZE;
                 SDL_RenderDrawRect(renderer, &wall);
             }
         }
     }
 
-    Player me = *(gptr->me);
+    Player me = *(gptr -> me);
+    me.pos = addc(me.pos, off);
 
 
     // draw rays
@@ -46,8 +48,8 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
     {
         SDL_RenderDrawLine(renderer, (int) (me.pos.x * MM_SIZE),
                                      (int) (me.pos.y * MM_SIZE),
-                                     (int) (rays[i].x   * MM_SIZE),
-                                     (int) (rays[i].y   * MM_SIZE));
+                                     (int) ((rays[i].x + off.x) * MM_SIZE),
+                                     (int) ((rays[i].y + off.y) * MM_SIZE));
     }
 
      // draw player as an arrow

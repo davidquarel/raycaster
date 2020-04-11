@@ -27,6 +27,10 @@ Run `./bin/ray`
 * K - increase minimap size
 * L - decrease minimap size
 * P - toggle show game status
+* KEYPAD_8 - move minimap up
+* KEYPAD_5 - move minimap down
+* KEYPAD_4 - move minimap left
+* KEYPAD_6 - move minimap right
 
 # TODO
 * Algorithm to cast rays is inefficient, and takes little 0.01 steps

@@ -103,18 +103,35 @@ void check_event(SDL_Event* eventptr, Game* gptr)
 
                     // increase minimap
                     case SDL_SCANCODE_K:
-                        gptr -> mm_size = max(0, gptr -> mm_size - 5);
+                        gptr -> mm_size *= 2; 
                         break;
 
                     // decrease minimap
                     case SDL_SCANCODE_L:
-                        gptr -> mm_size += 5;
+                        gptr -> mm_size = max(5, (gptr -> mm_size) / 2);
                         break; 
 
                     // toggle status
                     case SDL_SCANCODE_P:
                         gptr -> status_toggle = !gptr -> status_toggle;
                         break;
+
+                    // move minimap up
+                    case SDL_SCANCODE_KP_8:
+                        gptr -> mm_offset.y -= 20.0 / (gptr -> mm_size);
+                        break;
+                    // move minimap down
+                    case SDL_SCANCODE_KP_5:
+                        gptr -> mm_offset.y += 20.0 / (gptr -> mm_size);
+                        break;
+                    // move minimap left
+                    case SDL_SCANCODE_KP_4:
+                        gptr -> mm_offset.x -= 20.0 / (gptr -> mm_size);
+                        break;
+                    // move minimap right
+                    case SDL_SCANCODE_KP_6:
+                        gptr -> mm_offset.x += 20.0 / (gptr -> mm_size);
+                        break; 
 
                     default:
                         break;

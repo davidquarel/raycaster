@@ -34,7 +34,8 @@ int main(void) //int argc, char** argv)
                  .theta = PI/6.0, 
                  .fov = (PI/180.0) * 90};
 
-    Game game = {.map = &map,
+    Game game = {.mm_offset = {.x = 0.0, .y = 0.0},
+                .map = &map,
                 .me = &me,
                 .mm_toggle = true,
                 .status_toggle = true,

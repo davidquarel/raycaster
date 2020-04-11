@@ -35,17 +35,19 @@ Coord bad_cast_ray(Coord pos, double theta, World world)
 Coord cast_ray(Coord pos, double theta, World world)
 {
     Coord u = pos;
-    int stepX = (cos(theta) >= 0) ? 1 : -1;
-    int stepY = (sin(theta) >= 0) ? 1 : -1;
+    // v is unit vector in direction of ray travel
+    Coord v = {.x = cos(theta), .y = sin(theta)};
+    int stepX = (v.x >= 0) ? 1 : -1;
+    int stepY = (v.y >= 0) ? 1 : -1;
     int x = (int) u.x;
     int y = (int) u.y;
     double t;
     Coord hit;
     double tMaxX;
     double tMaxY;
-    double deltaX = fabs(1 / cos(theta));
-    double deltaY = fabs(1 / sin(theta));
-    bool fromX = true;
+    double deltaX = fabs(1 / v.x);
+    double deltaY = fabs(1 / v.y);
+    bool horz_hit = true;
 
     if(stepX == 1) 
         tMaxX = fabs( (ceil(u.x) - u.x) * deltaX);
@@ -57,29 +59,43 @@ Coord cast_ray(Coord pos, double theta, World world)
     else
         tMaxY = fabs( (floor(u.y) - u.y) * deltaY);
 
+    // loop should always run at least once
     while(world[y][x] != '#')
     {
         if(tMaxX < tMaxY)
         {
             tMaxX += deltaX;
             x += stepX;
-            fromX = true;
+            horz_hit = true;
         }
         else
         {
             tMaxY += deltaY;
             y += stepY;
-            fromX = false;
+            horz_hit = false;
         }
     }
 
-    if(fromX)
-        t = tMaxX - deltaX;
-    else
-        t = tMaxY - deltaY;
+    if(horz_hit)
+    {
+        if(stepX == 1)
+            hit.x = x;
+        else
+            hit.x = x+1;
 
-    hit.x = u.x + t*cos(theta);
-    hit.y = u.y + t*sin(theta);
+        t = (hit.x - u.x) / v.x;
+        hit.y = u.y + t*v.y;
+    }
+    else
+    {
+        if(stepY == 1)
+            hit.y = y;
+        else
+            hit.y = y+1;
+
+        t = (hit.y - u.y) / v.y;
+        hit.x = u.x + t*v.x;
+    }
     //printf("hit %.2f %2f\n, dist %.2f", hit.x, hit.y, t);
     return hit;
 }
