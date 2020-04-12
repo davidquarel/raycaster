@@ -21,20 +21,24 @@ Coord bad_cast_ray(Coord pos, double theta, World world)
 
 Coord cast_ray(Coord pos, double theta, World world)
 {
-    Coord u = pos;
-    // v is unit vector in direction of ray travel
-    Coord v = {.x = cos(theta), .y = sin(theta)};
+    Coord u = pos; //ray origin
+
+    //unit vector in direction of ray travel
+    Coord v = {.x = cos(theta), .y = sin(theta)}; 
     int stepX = (v.x >= 0) ? 1 : -1;
     int stepY = (v.y >= 0) ? 1 : -1;
     int x = (int) u.x;
     int y = (int) u.y;
-    double t;
-    Coord hit;
-    double tMaxX;
-    double tMaxY;
-    double deltaX = fabs(1 / v.x);
-    double deltaY = fabs(1 / v.y);
+    double t;                       // ray has equation u + tv
+    Coord hit;                      // where ray strikes wall
+    double tMaxX;                   // distance to next vert wall hit
+    double tMaxY;                   // distance to next horz wall hit
+    double deltaX = fabs(1 / v.x);  // gap between vert wall hits 
+    double deltaY = fabs(1 / v.y);  // gap between horz wall hits
     bool horz_hit = true;
+
+    // Amanatides algorithm
+    // http://www.cse.yorku.ca/~amana/research/grid.pdf    
 
     if(stepX == 1)
         tMaxX = fabs( (ceil(u.x) - u.x) * deltaX);
@@ -47,6 +51,7 @@ Coord cast_ray(Coord pos, double theta, World world)
         tMaxY = fabs( (floor(u.y) - u.y) * deltaY);
 
     // loop should always run at least once
+    // as the player can't be inside a wall
     while(world[y][x] != '#')
     {
         if(tMaxX < tMaxY)
@@ -63,22 +68,28 @@ Coord cast_ray(Coord pos, double theta, World world)
         }
     }
 
+    // the coordinate of the index of
+    // each wall is it's bottom left corner
+    // we have to add one if we hit the right side,
+    // or the top side (otherwise the ray hits the wrong side)
+    // determine which side was hit, and recompute the other coord
+
     if(horz_hit)
     {
-        if(stepX == 1)
-            hit.x = x;
+        if(stepX == 1)      // colliding left wall
+            hit.x = x;      
         else
-            hit.x = x+1;
+            hit.x = x+1;    // colliding right wall
 
         t = (hit.x - u.x) / v.x;
         hit.y = u.y + t*v.y;
     }
     else
     {
-        if(stepY == 1)
+        if(stepY == 1)      // colliding bottom wall
             hit.y = y;
         else
-            hit.y = y+1;
+            hit.y = y+1;    // colliding top wall
 
         t = (hit.y - u.y) / v.y;
         hit.x = u.x + t*v.x;

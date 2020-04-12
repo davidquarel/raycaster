@@ -6,5 +6,6 @@
 #include "types.h"
 
 void check_event(SDL_Event* eventptr, Game* gptr);
+void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode);
 
 #endif

@@ -39,6 +39,7 @@ Coord rotatec(Coord p, double theta)
 
 Coord rotate_about(Coord q, Coord p, double theta)
 {
+    // shift to origin, rotate about origin, shift back
     Coord new = addc(rotatec(subc(q,p),theta), p);
     return new;
 }
