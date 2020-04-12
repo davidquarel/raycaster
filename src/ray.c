@@ -49,7 +49,7 @@ Coord cast_ray(Coord pos, double theta, World world)
     double deltaY = fabs(1 / v.y);
     bool horz_hit = true;
 
-    if(stepX == 1) 
+    if(stepX == 1)
         tMaxX = fabs( (ceil(u.x) - u.x) * deltaX);
     else
         tMaxX = fabs( (floor(u.x) - u.x) * deltaX);
@@ -108,7 +108,7 @@ Coord cast_ray(Coord pos, double theta, World world)
    // Coord horz_wall;
    // Coord vert_wall;;
 
-	// double m = tan(theta);
+    // double m = tan(theta);
  //    int cellx = ceil(pos.x);
  //    int celly = ceil(pos.y);
  //    double y_error = 0;
@@ -130,7 +130,7 @@ Coord cast_ray(Coord pos, double theta, World world)
  //            celly += y_iter;
  //            y_error -= y_iter;
  //        }
- //        cellx += 1;   
+ //        cellx += 1;
  //    }
 
  //    double collx = cellx;

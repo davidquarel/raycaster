@@ -6,9 +6,9 @@
 typedef const char* World[];
 
 typedef struct {
-	int width;
-	int height;
-	World* world;
+    int width;
+    int height;
+    World* world;
 } Map;
 
 
@@ -25,9 +25,9 @@ typedef struct {
 
 typedef struct {
     Coord mm_offset;
-	Map* map;
-	Player* me;
-	bool mm_toggle;
+    Map* map;
+    Player* me;
+    bool mm_toggle;
     bool status_toggle;
     int mm_size;
     bool run;

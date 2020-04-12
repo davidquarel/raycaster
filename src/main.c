@@ -25,24 +25,24 @@ int main(void) //int argc, char** argv)
                      "#  ##  #   #",
                      "#    #   # #",
                      "############"};
-    
-    Map map =   {.width = 12, 
-                .height = 8,
-                .world = &world};
 
-    Player me = {.pos = {.x = 1.5, .y = 1.5}, 
-                 .theta = PI/6.0, 
+    Map map =   {.width = 12,
+                 .height = 8,
+                 .world = &world};
+
+    Player me = {.pos = {.x = 1.5, .y = 1.5},
+                 .theta = PI/6.0,
                  .fov = (PI/180.0) * 90};
 
     Game game = {.mm_offset = {.x = 0.0, .y = 0.0},
-                .map = &map,
-                .me = &me,
-                .mm_toggle = true,
-                .status_toggle = true,
-                .mm_size = 40,
-                .run = true,
-                .window_width = 640,
-                .window_height = 480};
+                 .map = &map,
+                 .me = &me,
+                 .mm_toggle = true,
+                 .status_toggle = true,
+                 .mm_size = 40,
+                 .run = true,
+                 .window_width = 640,
+                 .window_height = 480};
 
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
@@ -58,7 +58,7 @@ int main(void) //int argc, char** argv)
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_SetWindowTitle(window, "raycaster");
     SDL_RenderClear(renderer);
-    
+
     TTF_Init();
     TTF_Font* font = TTF_OpenFont("font/Hack-Regular.ttf", 14);
     if(font == NULL)
@@ -70,14 +70,14 @@ int main(void) //int argc, char** argv)
     // this will be used for drawing rays
     // on the minimap
     Coord rayhit[WINDOW_WIDTH];
-    char status_buf[120];    
+    char status_buf[120];
 
     while(game.run)
     {
 
         draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
-    
+
         if(game.mm_toggle)
             draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
 

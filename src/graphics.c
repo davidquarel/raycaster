@@ -25,12 +25,12 @@ void draw_status(SDL_Renderer* renderer, TTF_Font* font, Game* gptr, char* str)
 void draw_background(SDL_Renderer* renderer, Game* gptr)
 {
 
-	int const WINDOW_HEIGHT = gptr -> window_height;
-	int const WINDOW_WIDTH = gptr -> window_width;
+    int const WINDOW_HEIGHT = gptr -> window_height;
+    int const WINDOW_WIDTH = gptr -> window_width;
 
 
-	// draw sky
-	SDL_Rect back;
+    // draw sky
+    SDL_Rect back;
     back.w = WINDOW_WIDTH;
     back.h = WINDOW_HEIGHT / 2;
     back.x = 0;
@@ -38,7 +38,7 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
     SDL_SetRenderDrawColor(renderer, 0, 0, 127, 0); //dark blue
     SDL_RenderFillRect(renderer, &back);
 
- 	// draw earth
+     // draw earth
     back.y = WINDOW_HEIGHT / 2;
     SDL_SetRenderDrawColor(renderer, 0, 127, 0, 0); //dark green
     SDL_RenderFillRect(renderer, &back);
@@ -47,10 +47,10 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
 void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 {
 
-	const int WINDOW_WIDTH = gptr -> window_width;
-	const int WINDOW_HEIGHT = gptr -> window_height;
+    const int WINDOW_WIDTH = gptr -> window_width;
+    const int WINDOW_HEIGHT = gptr -> window_height;
 
-	Player me = *(gptr -> me);
+    Player me = *(gptr -> me);
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
@@ -66,7 +66,7 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 
         // cos(beta) to account for fish eye effect
         int height = (int) (WINDOW_HEIGHT * scale_factor);
-        
+
         int y1 = (WINDOW_HEIGHT  - height)/2;
         int y2 = (WINDOW_HEIGHT  + height)/2;
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
@@ -76,10 +76,10 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
         SDL_SetRenderDrawColor(renderer, color,     color,  color,  0);
         // denotes how far along the current block
         //the ray struck, between 0 and 1
-        double block_fraction = 
+        double block_fraction =
             fmax( ray_collide.x - ((int) ray_collide.x),
                  ray_collide.y - ((int) ray_collide.y));
-        
+
         // TODO: Now all walls are coloured correctly with stripes.
 
         if( ((int) (block_fraction*16)) % 2 == 0)
@@ -88,7 +88,7 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
             SDL_SetRenderDrawColor(renderer, 0,     color,  0,  0);
 
         SDL_RenderDrawLine(renderer, col, y1, col, y2);
-        
+
     }
 
 }

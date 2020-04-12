@@ -8,7 +8,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     int WORLD_WIDTH = gptr -> map -> width;
-    int WORLD_HEIGHT = gptr -> map -> height; 
+    int WORLD_HEIGHT = gptr -> map -> height;
     int MM_SIZE = gptr -> mm_size; //minimap scaling factor
 
     // draw minimap
@@ -55,13 +55,13 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
      // draw player as an arrow
     Coord head  = {.x = me.pos.x + 0.5, .y = me.pos.y};
     head        = rotate_about(head, me.pos, me.theta);
-    
+
     Coord ltail = {.x = me.pos.x - 0.5, .y = me.pos.y + 0.5};
     ltail       = rotate_about(ltail, me.pos, me.theta);
-    
+
     Coord rtail = {.x = me.pos.x - 0.5, .y = me.pos.y - 0.5};
     rtail       = rotate_about(rtail, me.pos, me.theta);
-    
+
     Coord tail  = {.x = me.pos.x - 0.25, .y = me.pos.y};
     tail        = rotate_about(tail, me.pos, me.theta);
 

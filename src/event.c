@@ -1,4 +1,4 @@
-#include "event.h"  
+#include "event.h"
 #include "types.h"
 #include "util.h"
 
@@ -8,7 +8,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
     double tmp;
     Coord cpos;
     SDL_Event event = *eventptr;
- 	bool wait = true;
+    bool wait = true;
     while(wait)
     {
         if(!SDL_PollEvent(&event))
@@ -103,13 +103,13 @@ void check_event(SDL_Event* eventptr, Game* gptr)
 
                     // increase minimap
                     case SDL_SCANCODE_K:
-                        gptr -> mm_size *= 2; 
+                        gptr -> mm_size *= 2;
                         break;
 
                     // decrease minimap
                     case SDL_SCANCODE_L:
                         gptr -> mm_size = max(5, (gptr -> mm_size) / 2);
-                        break; 
+                        break;
 
                     // toggle status
                     case SDL_SCANCODE_P:
@@ -131,7 +131,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
                     // move minimap right
                     case SDL_SCANCODE_KP_6:
                         gptr -> mm_offset.x += 20.0 / (gptr -> mm_size);
-                        break; 
+                        break;
 
                     default:
                         break;
