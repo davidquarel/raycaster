@@ -15,7 +15,7 @@ default: all
 dump: $(DUMPFILE)
 
 $(DUMPFILE):
-    $(DISASM) $(DISASMFLAGS) $(TARGET) > $(DUMPFILE)
+	$(DISASM) $(DISASMFLAGS) $(TARGET) > $(DUMPFILE)
 
 debug: CFLAGS += $(DEBUGFLAGS)
 debug: all
@@ -23,8 +23,8 @@ debug: all
 all: $(TARGET)
 
 $(TARGET): $(OBJFILES)
-    $(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
 
 
 clean:
-    rm -f $(OBJFILES) $(TARGET) $(DUMPFILE)
+	rm -f $(OBJFILES) $(TARGET) $(DUMPFILE)

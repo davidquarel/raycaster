@@ -1,6 +1,6 @@
 #include <stdbool.h>
-#include <time.h>
-#include <unistd.h>
+//#include <time.h>
+//#include <unistd.h>
 #include <stdio.h>
 
 #include <SDL2/SDL.h>
@@ -8,7 +8,6 @@
 
 #include "types.h"
 #include "util.h"
-
 #include "event.h"
 #include "graphics.h"
 #include "io.h"
