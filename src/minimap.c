@@ -44,7 +44,8 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
     // looks like a flashlight, draw it yellow
     SDL_SetRenderDrawColor(renderer, 255,     255,  0,  128);
 
-    for (int i = 0; i < num_rays; i++)
+    // only draw every 20th ray to save on CPU
+    for (int i = 0; i < num_rays; i += 20)
     {
         SDL_RenderDrawLine(renderer, (int) (me.pos.x * MM_SIZE),
                                      (int) (me.pos.y * MM_SIZE),
