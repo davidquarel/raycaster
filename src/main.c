@@ -12,6 +12,7 @@
 #include "graphics.h"
 #include "io.h"
 #include "minimap.h"
+#include "action.h"
 
 int main(void) //int argc, char** argv)
 {
@@ -52,6 +53,10 @@ int main(void) //int argc, char** argv)
     SDL_Renderer* renderer;
     SDL_Window* window;
 
+    // for drawing the status
+    SDL_Surface* stat_surf = NULL;
+    SDL_Texture* stat_txt = NULL;
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
@@ -86,7 +91,7 @@ int main(void) //int argc, char** argv)
         print_game_status(&game, status_buf);
         //printf("%s\n", status_buf);
         if(game.status_toggle)
-            draw_status(renderer, font, &game, status_buf);
+            draw_status(renderer, stat_surf, stat_txt, font, &game, status_buf);
         SDL_RenderPresent(renderer);
 	
         //TODO: game only updates upon keypress
@@ -99,8 +104,8 @@ int main(void) //int argc, char** argv)
     // test for quit
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    //SDL_DestroyTexture(texture);
-    //SDL_FreeSurface(surface);
+    SDL_DestroyTexture(stat_txt);
+    SDL_FreeSurface(stat_surf);
     TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;

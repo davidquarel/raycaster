@@ -5,22 +5,26 @@
 #include "color.h"
 #include "minimap.h"
 
-void draw_status(SDL_Renderer* renderer, TTF_Font* font, Game* gptr, char* str)
+void draw_status(   SDL_Renderer* renderer, 
+                    SDL_Surface* surface, 
+                    SDL_Texture* texture, 
+                    TTF_Font* font, 
+                    Game* gptr, 
+                    char* str)
 {
     int WINDOW_WIDTH = gptr -> window_width;
 
     // draw some text for game stats
     // http://gigi.nullneuron.net/gigilabs/displaying-text-in-sdl2-with-sdl_ttf/
     SDL_Color white = {255,255,255,128};
-    SDL_Surface* status = TTF_RenderText_Blended_Wrapped(font, str, white, WINDOW_WIDTH / 4);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, status);
+    surface = TTF_RenderText_Blended_Wrapped(font, str, white, WINDOW_WIDTH / 4);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
     int texW = 0;
     int texH = 0;
     //ask for the size of rectangle required to fit the text
     SDL_QueryTexture(texture, NULL, NULL, &texW, &texH); 
     SDL_Rect dstrect = {3* WINDOW_WIDTH / 4, 0, texW, texH};
     SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-
 }
 
 void draw_background(SDL_Renderer* renderer, Game* gptr)
@@ -55,6 +59,7 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
+    // cast a ray for each vertical lines in the window
     for (int col = 0; col < WINDOW_WIDTH; col++)
     {
         Coord ray_collide = cast_ray(me.pos, ray_theta, *worldptr);
@@ -81,7 +86,7 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
             fmax( ray_collide.x - ((int) ray_collide.x),
                  ray_collide.y - ((int) ray_collide.y));
 
-        // Colour the walls with verticle stripes
+        // Colour the walls with 16 verticle stripes
 
         if( ((int) (block_fraction*16)) % 2 == 0)
             SDL_SetRenderDrawColor(renderer, color, 0,      0, 0); //red
@@ -89,7 +94,5 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
             SDL_SetRenderDrawColor(renderer, 0,     color,  0,  0); //green
 
         SDL_RenderDrawLine(renderer, col, y1, col, y2);
-
     }
-
 }

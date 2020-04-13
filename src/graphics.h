@@ -9,6 +9,12 @@
 //void draw_status(SDL_Renderer* renderer, Game* gptr);
 void draw_background(SDL_Renderer* renderer, Game* gptr);
 void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit);
-void draw_status(SDL_Renderer* renderer, TTF_Font* font, Game* gptr, char* str);
+
+void draw_status(   SDL_Renderer* renderer, 
+                    SDL_Surface* surface, 
+                    SDL_Texture* texture, 
+                    TTF_Font* font, 
+                    Game* gptr, 
+                    char* str);
 
 #endif
