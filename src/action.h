@@ -4,6 +4,6 @@
 #include <SDL2/SDL.h>
 #include "types.h"
 
-void move_player(Game* gptr, double mspeed);
+void move_player(Game* gptr, double mspeed, double tspeed);
 
 #endif

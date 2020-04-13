@@ -47,7 +47,7 @@ int main(void) //int argc, char** argv)
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
     const double MOVE_SPEED = 0.05;
-
+    const double TURN_SPEED = 0.05;
     // took some SDL boilerplate from the SDL wiki
     // https://wiki.libsdl.org/
     SDL_Event event;
@@ -82,7 +82,7 @@ int main(void) //int argc, char** argv)
         double start = clock();
 	//Process SDL events (User input, etc)
 	check_event(&event, &game);
-	move_player(&game, MOVE_SPEED); //Movement speed        
+	move_player(&game, MOVE_SPEED, TURN_SPEED);
 	//Render the game
 	draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
