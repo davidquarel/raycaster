@@ -5,6 +5,11 @@
 #include "color.h"
 #include "minimap.h"
 
+
+
+//TODO:
+//Actually sane behaviour in draw_status
+//Init surface/texture once then modify rather then create and destroy every frame
 void draw_status(SDL_Renderer* renderer, TTF_Font* font, Game* gptr, char* str)
 {
     int WINDOW_WIDTH = gptr -> window_width;
