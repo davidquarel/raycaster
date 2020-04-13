@@ -31,6 +31,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
             case SDL_MOUSEBUTTONDOWN: //Trap for 1025
             case SDL_MOUSEBUTTONUP: //Trap for 1026
             case SDL_TEXTINPUT:	//Trap for 771
+	    case SDL_WINDOWEVENT: //Trap for 512
                 break;
             
             default:
