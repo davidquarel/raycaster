@@ -35,49 +35,39 @@ void check_event(SDL_Event* eventptr, Game* gptr)
         }
     }
 }
+void move_player(Game* gptr, float x, float y, float mspeed){
+	Coord cpos;
+	cpos = gptr -> me -> pos;
+	cpos.x += x * mspeed;
+	cpos.y += y * mspeed;
+	if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
+		gptr -> me -> pos = cpos;
+}
+
 
 void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode)
 {
     double tmp;
-    Coord cpos;
+//    Coord cpos;
     switch(scancode)
     {
         // strafe left, check collisions
         // if about to walk through a wall, do nothing
         case SDL_SCANCODE_A:
-            cpos = gptr -> me -> pos;
-            cpos.x += 0.1 * cos(gptr -> me->theta - PI/2);
-            cpos.y += 0.1 * sin(gptr -> me->theta - PI/2);
-            if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
-                gptr -> me -> pos = cpos;
-            break;
-
+		move_player(gptr,cos(gptr -> me->theta - PI/2),sin(gptr -> me->theta - PI/2),0.1);
+		break;
         // strafe right
         case SDL_SCANCODE_D:
-            cpos = gptr -> me -> pos;
-            cpos.x += 0.1 * cos(gptr -> me->theta + PI/2);
-            cpos.y += 0.1 * sin(gptr -> me->theta + PI/2);
-            if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
-                gptr -> me -> pos = cpos;
-            break;
-
+		move_player(gptr,cos(gptr -> me->theta + PI/2),sin(gptr -> me->theta + PI/2),0.1);
+		break;
         // walk forward
         case SDL_SCANCODE_W:
-            cpos = gptr -> me -> pos;
-            cpos.x += 0.1 * cos(gptr -> me->theta);
-            cpos.y += 0.1 * sin(gptr -> me->theta);
-            if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
-                gptr -> me -> pos = cpos;
-            break;
-
+		move_player(gptr,cos(gptr -> me->theta),sin(gptr -> me->theta),0.1);
+		break;
         // walk backward
         case SDL_SCANCODE_S:
-            cpos = gptr -> me -> pos;
-            cpos.x -= 0.1 * cos(gptr -> me->theta);
-            cpos.y -= 0.1 * sin(gptr -> me->theta);
-            if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#')
-                gptr -> me -> pos = cpos;
-            break;
+		move_player(gptr,-cos(gptr -> me->theta),-sin(gptr -> me->theta),0.1);
+		break;
 
         // rotate left
         // keep theta in [0, 2*PI)
@@ -155,4 +145,6 @@ void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode)
         default:
             break;
     }
-} 
+}
+
+
