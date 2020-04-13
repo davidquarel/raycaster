@@ -1,10 +1,11 @@
 #include <stdbool.h>
 #include <time.h>
-//#include <unistd.h>
+#include <unistd.h>
 #include <stdio.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include "types.h"
 #include "util.h"
@@ -70,13 +71,57 @@ int main(void) //int argc, char** argv)
     SDL_SetWindowTitle(window, "raycaster");
     SDL_RenderClear(renderer);
 
+    // initalise fonts
     TTF_Init();
     TTF_Font* font = TTF_OpenFont("font/Hack-Regular.ttf", 14);
     if(font == NULL)
     {
-        printf("Failed to load font.\n");
+        printf("main.c: Failed to load font.\n");
         return EXIT_FAILURE;
     }
+
+    // initalise texture from file
+    // https://www.libsdl.org/projects/SDL_image/docs/SDL_image.html
+    int initted = IMG_Init(IMG_INIT_PNG);
+    if(initted != IMG_INIT_PNG)
+    {
+        printf("main.c: Failed to init IMG library.\n");
+        return EXIT_FAILURE;
+    }
+    SDL_Surface* image;
+    image = IMG_Load("img/jon.png");
+    if(image == NULL)
+    {
+        printf("IMG_Load: %s\n", IMG_GetError());
+        return EXIT_FAILURE;
+    }
+    if(image -> h != 256 || image -> w != 256)
+    {
+        printf("main.c: image dimension mismatch.\n");
+        return EXIT_FAILURE;
+    }
+    SDL_PixelFormat* format = image -> format;
+    printf("bitsperpixel: %d\n", format -> BitsPerPixel);
+    printf("bytesperpixel %d\n", format -> BytesPerPixel);
+
+    SDL_Color textures[256][256];
+
+    for (int x = 0; x < 64; x++)
+    {
+        for (int y = 0; y < 64; y++)
+        {   
+            uint8_t r;
+            uint8_t g;
+            uint8_t b;
+            SDL_GetRGB( * (((Uint32*)(image -> pixels)) + 3*y + 3*256*x), format, &r, &g, &b);
+            //printf("r: %d, g: %d, b %d", r, g, b);
+            textures[x][y].r = r;
+            textures[x][y].g = g;
+            textures[x][y].b = b;
+
+        }
+    }
+
     
     // this will be used for drawing rays
     // on the minimap
@@ -85,8 +130,8 @@ int main(void) //int argc, char** argv)
 
     // end init section
 
-    SDL_Color textures[256][256];
-    init_xor_texture(&game, textures);
+    
+    // init_xor_texture(&game, textures);
     //SDL_Color jon[256][256];
     //init_texture_from_file(&game, jon, )
 
@@ -139,6 +184,7 @@ int main(void) //int argc, char** argv)
     SDL_DestroyWindow(window);
     SDL_DestroyTexture(stat_txt);
     SDL_FreeSurface(stat_surf);
+    IMG_Quit();
     TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
