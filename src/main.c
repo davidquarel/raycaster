@@ -13,6 +13,7 @@
 #include "io.h"
 #include "minimap.h"
 #include "action.h"
+#include "texture.h"
 
 int main(void) //int argc, char** argv)
 {
@@ -43,10 +44,14 @@ int main(void) //int argc, char** argv)
                  .mm_size = 40,
                  .run = true,
                  .window_width = 1024,
-                 .window_height = 768};
+                 .window_height = 768,
+                 .texture_height = 256,
+                 .texture_width = 256};
 
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
+    const int TEX_WIDTH = game.texture_height;
+    const int TEX_HEIGHT = game.texture_width;
     const double MOVE_SPEED = 0.05;
     const double TURN_SPEED = 0.05;
     // took some SDL boilerplate from the SDL wiki
@@ -80,15 +85,19 @@ int main(void) //int argc, char** argv)
 
     // end init section
 
+    SDL_Color textures[256][256];
+
+    init_texture(&game, textures);
+
     while(game.run)
     {
         double start = clock();
-	//Process SDL events (User input, etc)
-	check_event(&event, &game);
-	move_player(&game, MOVE_SPEED, TURN_SPEED);
-	//Render the game
-	draw_background(renderer, &game);
-        draw_walls(renderer, &game, rayhit);
+        //Process SDL events (User input, etc)
+        check_event(&event, &game);
+        move_player(&game, MOVE_SPEED, TURN_SPEED);
+        //Render the game
+        draw_background(renderer, &game);
+        draw_walls(renderer, &game, rayhit, textures);
 
         if(game.mm_toggle)
             draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);

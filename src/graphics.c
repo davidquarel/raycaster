@@ -51,27 +51,16 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
     SDL_RenderFillRect(renderer, &back);
 }
 
-void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
+void draw_walls(SDL_Renderer* renderer, 
+                Game* gptr, 
+                Coord* rayhit,
+                SDL_Color textures[256][256])
 {
-    const int TEX_WIDTH = 256;
-    const int TEX_HEIGHT = 256;
-    // texture 0 = XOR texture
-    SDL_Color texture[1][TEX_WIDTH][TEX_HEIGHT];
-
-    for (int x = 0; x < TEX_WIDTH; x++)
-    {
-        for (int y = 0; y < TEX_HEIGHT; y++)
-        {
-            int val = x ^ y;
-            texture[0][x][y].r = val;
-            texture[0][x][y].b = val;
-            texture[0][x][y].g = val;
-            texture[0][x][y].a = 0;
-        }
-    }
-
     const int WINDOW_WIDTH = gptr -> window_width;
     const int WINDOW_HEIGHT = gptr -> window_height;
+    const int TEX_WIDTH = gptr -> texture_width;
+    const int TEX_HEIGHT = gptr -> texture_height;
+
     World* worldptr = gptr -> map -> world;
     Player me = *(gptr -> me);
 
@@ -90,8 +79,14 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 
         int height = (int) (WINDOW_HEIGHT * scale_factor);
 
-        int y1 = (WINDOW_HEIGHT  - height)/2;
-        int y2 = (WINDOW_HEIGHT  + height)/2;
+        // wall may extend well outside view area
+        int y_bot = (WINDOW_HEIGHT  - height)/2;
+        int y_top = (WINDOW_HEIGHT  + height)/2;
+
+        // only draw the part of the wall in the view area
+        int y1 = max(0, y_bot);
+        int y2 = min(WINDOW_HEIGHT, y_top);
+
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
 
@@ -109,9 +104,9 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
         for (int y = y1; y <= y2; y++)
         {   
             double ycurr = (double) y;
-            double wall_frac = (ycurr - ((double) y1) ) / ((double) height);
+            double wall_frac = (ycurr - y_bot) / height;
             int tex_y = (int) (wall_frac * TEX_HEIGHT); 
-            SDL_Color val = texture[0][tex_x][tex_y];
+            SDL_Color val = textures[tex_x][tex_y];
             SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
             SDL_RenderDrawPoint(renderer, col, y);
         }

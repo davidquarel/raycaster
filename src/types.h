@@ -33,6 +33,8 @@ typedef struct {
     bool run;
     int window_width;
     int window_height;
+    int texture_height;
+    int texture_width;
 } Game;
 
 
