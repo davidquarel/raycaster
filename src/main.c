@@ -73,24 +73,27 @@ int main(void) //int argc, char** argv)
 
     while(game.run)
     {
-
-        draw_background(renderer, &game);
+        //Process SDL events (User input, etc)
+	check_event(&event, &game);
+	move_player(&game,0.05); //Movement speed        
+	//Render the game
+	draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
 
         if(game.mm_toggle)
             draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
-
+	//Bog it
         print_game_status(&game, status_buf);
         //printf("%s\n", status_buf);
         if(game.status_toggle)
             draw_status(renderer, font, &game, status_buf);
         SDL_RenderPresent(renderer);
-
+	
         //TODO: game only updates upon keypress
         //Make it run at constant 60fps, use keyboard and mouse to look around
 
-        check_event(&event, &game);
-	const struct timespec sleeptime = {0, 50000000L};
+	//Busy waits are for bricks
+	const struct timespec sleeptime = {0, 16777777L};
         nanosleep(&sleeptime, NULL); 
     }
     // test for quit
