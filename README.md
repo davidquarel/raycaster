@@ -7,9 +7,9 @@ Raycaster in C by David Quarel
 # Dependencies
 ```
 Ubuntu:
-	sudo apt-get install make gcc libsdl2-dev libsdl2-ttf-dev
+	sudo apt-get install make gcc libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev
 Arch:
-	pacman -S make gcc sdl2 sdl2_gfx sdl2_ttf sdl_image
+	pacman -S make(?) gcc sdl2 sdl2_gfx sdl2_ttf sdl_image (???)
 ```
 
 # How to run
@@ -40,8 +40,10 @@ maths to make it fast.~~ DONE
 * ~~Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
 it to run at 30/60fps, and you hold WASD to constantly move in that direction,~~
 and look using the mouse. Half-Done
-* Learn how to and then implement texture mapping. ~~Grey walls are boring~~ Stripey
-walls are less boring.
+* ~~Learn how to and then implement texture mapping.~~ ~~Grey walls are boring~~ ~~Stripey
+walls are less boring.~~ Done, but it needs to be more efficient.
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
 * ~~Add collisions with walls~~ DONE
 * Add something for the player to interact with (items, monsters)
+* Texture map the sky and the floor.
+* Add some music/SFX from open domain material.

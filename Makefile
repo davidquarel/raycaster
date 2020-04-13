@@ -1,7 +1,7 @@
 CC          = gcc
 CFLAGS      = -Wall -O2 -march=native ##Remove the -mavx if you're compiling for a literal dinosaur
 DEBUGFLAGS  = -ggdb3
-LDFLAGS     = -lSDL2 -lSDL2_ttf -lm
+LDFLAGS     = -lSDL2 -lSDL2_ttf -lSDL2_image -lm
 OBJFILES    = $(patsubst %.c,%.o,$(wildcard ./src/*.c))
 TARGET      = bin/ray
 DISASM	    = objdump

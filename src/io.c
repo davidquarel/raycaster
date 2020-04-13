@@ -1,5 +1,4 @@
 #include "io.h"
-#include <stdio.h>
 #include "util.h"
 
 void print_game_status(Game* gptr, char* str)
@@ -17,4 +16,27 @@ void print_game_status(Game* gptr, char* str)
             gptr -> mm_size,
             gptr -> mm_toggle ? "true" : "false",
             gptr -> fps);
+}
+
+void read_ppm_to_textures(FILE* ppm, SDL_Color textures[256][256])
+{
+    // assume image is 256*256 with 8 bit colour
+    char header[14];
+    if(!fread(header, sizeof(header),1, ppm))
+    {
+        printf("io.c: failed to read ppm header");
+        return;
+    }
+    char rgb[3];
+    for(int x = 0; x < 256; x++)
+    {
+        for(int y = 0; y < 256; y++)
+        {
+            fread(rgb, 3, 1, ppm);
+            textures[y][x].r = rgb[1];
+            textures[y][x].g = rgb[2];
+            textures[y][x].b = rgb[0];
+            textures[y][x].a = 0;
+        }    
+    }
 }
