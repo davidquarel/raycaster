@@ -7,5 +7,5 @@
 
 void check_event(SDL_Event* eventptr, Game* gptr);
 void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode);
-void move_player(Game* gptr, double mspeed);
+void move_player(Game* gptr, double mspeed, double tspeed);
 #endif

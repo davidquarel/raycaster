@@ -76,7 +76,7 @@ int main(void) //int argc, char** argv)
         double start = clock();
 	//Process SDL events (User input, etc)
 	check_event(&event, &game);
-	move_player(&game,0.05); //Movement speed        
+	move_player(&game,0.05,0.05); //Movement speed        
 	//Render the game
 	draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
