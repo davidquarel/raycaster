@@ -32,7 +32,11 @@ void read_ppm_to_textures(FILE* ppm, SDL_Color textures[256][256])
     {
         for(int y = 0; y < 256; y++)
         {
-            fread(rgb, 3, 1, ppm);
+            if( 3 != fread(rgb, 1, 3, ppm))
+            {
+                printf("io.c: reading ppm error at index x=%d y=%d\n", x, y);
+            }
+                
             textures[y][x].r = rgb[1];
             textures[y][x].g = rgb[2];
             textures[y][x].b = rgb[0];
