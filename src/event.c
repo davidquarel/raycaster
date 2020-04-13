@@ -10,8 +10,8 @@ void check_event(SDL_Event* eventptr, Game* gptr)
     while(wait)
     {
         if(!SDL_PollEvent(&event))
-            continue;
-
+            //continue;
+            return;
         switch(event.type)
         {
 

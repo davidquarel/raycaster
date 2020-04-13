@@ -1,5 +1,5 @@
 #include <stdbool.h>
-//#include <time.h>
+#include <time.h>
 //#include <unistd.h>
 #include <stdio.h>
 
@@ -90,6 +90,8 @@ int main(void) //int argc, char** argv)
         //Make it run at constant 60fps, use keyboard and mouse to look around
 
         check_event(&event, &game);
+	const struct timespec sleeptime = {0, 50000000L};
+        nanosleep(&sleeptime, NULL); 
     }
     // test for quit
     SDL_DestroyRenderer(renderer);

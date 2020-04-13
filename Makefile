@@ -1,5 +1,5 @@
 CC          = gcc
-CFLAGS      = -Wall --std=c99 -O2 -march=native ##Remove the -mavx if you're compiling for a literal dinosaur
+CFLAGS      = -Wall -O2 -march=native ##Remove the -mavx if you're compiling for a literal dinosaur
 DEBUGFLAGS  = -ggdb3
 LDFLAGS     = -lSDL2 -lSDL2_ttf -lm
 OBJFILES    = $(patsubst %.c,%.o,$(wildcard ./src/*.c))
