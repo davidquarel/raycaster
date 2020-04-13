@@ -36,7 +36,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
     }
 }
 
-void move_player(Game* gptr, float x, float y, float mspeed){
+void move_player(Game* gptr, double x, double y, double mspeed){
 	//Attempts to move the player x*mspeed in the X axis, and y*mspeed in the Y axis.
 	//Prevents movement if it would result in the player going through a map wall
 	Coord cpos;
