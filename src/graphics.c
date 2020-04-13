@@ -51,6 +51,22 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
 
 void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
 {
+    const int TEX_WIDTH = 256;
+    const int TEX_HEIGHT = 256;
+    // texture 0 = XOR texture
+    SDL_Color texture[1][TEX_WIDTH][TEX_HEIGHT];
+
+    for (int x = 0; x < TEX_WIDTH; x++)
+    {
+        for (int y = 0; y < TEX_HEIGHT; y++)
+        {
+            int val = x ^ y;
+            texture[0][x][y].r = val;
+            texture[0][x][y].b = val;
+            texture[0][x][y].g = val;
+            texture[0][x][y].a = 0;
+        }
+    }
 
     const int WINDOW_WIDTH = gptr -> window_width;
     const int WINDOW_HEIGHT = gptr -> window_height;
@@ -85,14 +101,17 @@ void draw_walls(SDL_Renderer* renderer, Game* gptr, Coord* rayhit)
         double block_fraction =
             fmax( ray_collide.x - ((int) ray_collide.x),
                  ray_collide.y - ((int) ray_collide.y));
+    
+        int tex_x = (int) (TEX_WIDTH * block_fraction);
 
-        // Colour the walls with 16 verticle stripes
-
-        if( ((int) (block_fraction*16)) % 2 == 0)
-            SDL_SetRenderDrawColor(renderer, color, 0,      0, 0); //red
-        else
-            SDL_SetRenderDrawColor(renderer, 0,     color,  0,  0); //green
-
-        SDL_RenderDrawLine(renderer, col, y1, col, y2);
+        for (int y = y1; y <= y2; y++)
+        {   
+            double ycurr = (double) y;
+            double wall_frac = (ycurr - ((double) y1) ) / ((double) height);
+            int tex_y = (int) (wall_frac * TEX_HEIGHT); 
+            SDL_Color val = texture[0][tex_x][tex_y];
+            SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
+            SDL_RenderDrawPoint(renderer, col, y);
+        }
     }
 }

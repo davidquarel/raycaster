@@ -16,6 +16,7 @@
 
 int main(void) //int argc, char** argv)
 {
+    // begin init section
 
     World world  =  {"############",
                      "#          #",
@@ -71,41 +72,41 @@ int main(void) //int argc, char** argv)
         printf("Failed to load font.\n");
         return EXIT_FAILURE;
     }
-
+    
     // this will be used for drawing rays
     // on the minimap
     Coord rayhit[WINDOW_WIDTH];
     char status_buf[120];
 
+    // end init section
+
     while(game.run)
     {
         double start = clock();
-	//Process SDL events (User input, etc)
-	check_event(&event, &game);
-	move_player(&game, MOVE_SPEED); //Movement speed        
-	//Render the game
-	draw_background(renderer, &game);
+        //Process SDL events (User input, etc)
+        check_event(&event, &game);
+        move_player(&game, MOVE_SPEED); //Movement speed        
+        
+        //Render the game
+        draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
 
         if(game.mm_toggle)
             draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
-	//Bog it
-        print_game_status(&game, status_buf);
+	    
         //printf("%s\n", status_buf);
         if(game.status_toggle)
+        {
+            print_game_status(&game, status_buf);
             draw_status(renderer, stat_surf, stat_txt, font, &game, status_buf);
+        }
+            
         SDL_RenderPresent(renderer);
 	
-        //TODO: game only updates upon keypress
-        //Make it run at constant 60fps, use keyboard and mouse to look around
 
-	//Busy waits are for bricks
-	
-	double end = clock();
-
-//	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
-	const struct timespec sleeptime = {0, 16777777L - ((long)((end-start) * 1000))};
-//	const struct timespec sleeptime = {0, 16777777L};
+        // Delay until 1/60 seconds have elapsed (include computation time)
+        double end = clock();
+        const struct timespec sleeptime = {0, 16777777L - ((long)((end-start) * 1000))};
         nanosleep(&sleeptime, NULL); 
     }
     // test for quit
