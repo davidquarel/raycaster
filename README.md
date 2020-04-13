@@ -6,13 +6,14 @@ Raycaster in C by David Quarel
 
 # Dependencies
 ```
-sudo apt-get install libsdl2-dev libsdl2-ttf-dev
+Ubuntu:
+	sudo apt-get install make gcc libsdl2-dev libsdl2-ttf-dev
+Arch:
+	pacman -S make gcc sdl2 sdl2_gfx sdl2_ttf sdl_image
 ```
 
 # How to run
-Run the makefile with `make`.
-
-Run `./bin/ray`
+Compile with `make`, then run `./bin/ray`.
 
 # How to play
 * W - Move Forward
@@ -36,9 +37,9 @@ Run `./bin/ray`
 * ~~Algorithm to cast rays is inefficient, and takes little 0.01 steps
 forward till it hits a wall. Use Bresenhams line algorithm and some
 maths to make it fast.~~ DONE
-* Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
-it to run at 30/60fps, and you hold WASD to constantly move in that direction,
-and look using the mouse.
+* ~~Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
+it to run at 30/60fps, and you hold WASD to constantly move in that direction,~~
+and look using the mouse. Half-Done
 * Learn how to and then implement texture mapping. ~~Grey walls are boring~~ Stripey
 walls are less boring.
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE

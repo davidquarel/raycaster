@@ -1,7 +1,7 @@
 #include "action.h"
 #include "util.h"
 
-void move_player(Game* gptr, double mspeed)
+void move_player(Game* gptr, double mspeed, double tspeed)
 {
 	// Attempts to move the player x*mspeed in the X axis, 
     // and y*mspeed in the Y axis.
@@ -19,14 +19,17 @@ void move_player(Game* gptr, double mspeed)
         // keep theta in [0, 2*PI)
         
 	if (keystate[SDL_SCANCODE_LEFT]){
-		cur_theta = fmod(cur_theta - 0.05, 2*PI);
+		cur_theta -= tspeed;
 		if (cur_theta < 0){
 			cur_theta += 2*PI;
 		}
 		gptr -> me -> theta = cur_theta;
 	}	
 	if (keystate[SDL_SCANCODE_RIGHT]){
-		cur_theta = fmod(cur_theta + 0.05, 2*PI);
+		cur_theta += tspeed;
+		if (cur_theta > 0){
+			cur_theta -= 2*PI;
+		}
 		gptr -> me -> theta = cur_theta;
 	}
         

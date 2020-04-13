@@ -48,7 +48,7 @@ int main(void) //int argc, char** argv)
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
     const double MOVE_SPEED = 0.05;
-
+    const double TURN_SPEED = 0.05;
     // took some SDL boilerplate from the SDL wiki
     // https://wiki.libsdl.org/
     SDL_Event event;
@@ -83,12 +83,11 @@ int main(void) //int argc, char** argv)
     while(game.run)
     {
         double start = clock();
-        //Process SDL events (User input, etc)
-        check_event(&event, &game);
-        move_player(&game, MOVE_SPEED); //Movement speed        
-        
-        //Render the game
-        draw_background(renderer, &game);
+	//Process SDL events (User input, etc)
+	check_event(&event, &game);
+	move_player(&game, MOVE_SPEED, TURN_SPEED);
+	//Render the game
+	draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
 
         if(game.mm_toggle)
@@ -104,9 +103,13 @@ int main(void) //int argc, char** argv)
         SDL_RenderPresent(renderer);
 	
 
-        // Delay until 1/60 seconds have elapsed (include computation time)
-        double end = clock();
-        const struct timespec sleeptime = {0, 16777777L - ((long)((end-start) * 1000))};
+	//Busy waits are for bricks
+	//Sleeps for remaining 1/60th of a second, or just sends it if it's behind	
+	double end = clock();
+
+//	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
+	const struct timespec sleeptime = {0, max(0,16777777L - ((long)((end-start) * 1000)))};
+//	const struct timespec sleeptime = {0, 16777777L};
         nanosleep(&sleeptime, NULL); 
     }
     // test for quit
