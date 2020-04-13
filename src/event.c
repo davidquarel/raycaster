@@ -35,7 +35,10 @@ void check_event(SDL_Event* eventptr, Game* gptr)
         }
     }
 }
+
 void move_player(Game* gptr, float x, float y, float mspeed){
+	//Attempts to move the player x*mspeed in the X axis, and y*mspeed in the Y axis.
+	//Prevents movement if it would result in the player going through a map wall
 	Coord cpos;
 	cpos = gptr -> me -> pos;
 	cpos.x += x * mspeed;
@@ -51,8 +54,7 @@ void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode)
 //    Coord cpos;
     switch(scancode)
     {
-        // strafe left, check collisions
-        // if about to walk through a wall, do nothing
+        // strafe left
         case SDL_SCANCODE_A:
 		move_player(gptr,cos(gptr -> me->theta - PI/2),sin(gptr -> me->theta - PI/2),0.1);
 		break;
