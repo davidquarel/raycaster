@@ -46,6 +46,7 @@ int main(void) //int argc, char** argv)
 
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
+    const double MOVE_SPEED = 0.05;
 
     // took some SDL boilerplate from the SDL wiki
     // https://wiki.libsdl.org/
@@ -78,9 +79,10 @@ int main(void) //int argc, char** argv)
 
     while(game.run)
     {
-        //Process SDL events (User input, etc)
+        double start = clock();
+	//Process SDL events (User input, etc)
 	check_event(&event, &game);
-	move_player(&game,0.05); //Movement speed        
+	move_player(&game, MOVE_SPEED); //Movement speed        
 	//Render the game
 	draw_background(renderer, &game);
         draw_walls(renderer, &game, rayhit);
@@ -98,7 +100,12 @@ int main(void) //int argc, char** argv)
         //Make it run at constant 60fps, use keyboard and mouse to look around
 
 	//Busy waits are for bricks
-	const struct timespec sleeptime = {0, 16777777L};
+	
+	double end = clock();
+
+//	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
+	const struct timespec sleeptime = {0, 16777777L - ((long)((end-start) * 1000))};
+//	const struct timespec sleeptime = {0, 16777777L};
         nanosleep(&sleeptime, NULL); 
     }
     // test for quit
