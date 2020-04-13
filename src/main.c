@@ -73,7 +73,8 @@ int main(void) //int argc, char** argv)
 
     while(game.run)
     {
-        //Process SDL events (User input, etc)
+        double start = clock();
+	//Process SDL events (User input, etc)
 	check_event(&event, &game);
 	move_player(&game,0.05); //Movement speed        
 	//Render the game
@@ -93,7 +94,12 @@ int main(void) //int argc, char** argv)
         //Make it run at constant 60fps, use keyboard and mouse to look around
 
 	//Busy waits are for bricks
-	const struct timespec sleeptime = {0, 16777777L};
+	
+	double end = clock();
+
+//	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
+	const struct timespec sleeptime = {0, 16777777L - ((long)((end-start) * 1000))};
+//	const struct timespec sleeptime = {0, 16777777L};
         nanosleep(&sleeptime, NULL); 
     }
     // test for quit
