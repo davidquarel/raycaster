@@ -40,8 +40,8 @@ int main(void) //int argc, char** argv)
                  .status_toggle = true,
                  .mm_size = 40,
                  .run = true,
-                 .window_width = 640,
-                 .window_height = 480};
+                 .window_width = 1024,
+                 .window_height = 768};
 
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
