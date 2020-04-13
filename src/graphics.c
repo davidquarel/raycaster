@@ -20,7 +20,10 @@ void draw_status(SDL_Renderer* renderer, TTF_Font* font, Game* gptr, char* str)
     SDL_QueryTexture(texture, NULL, NULL, &texW, &texH); 
     SDL_Rect dstrect = {3* WINDOW_WIDTH / 4, 0, texW, texH};
     SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-
+    
+    //Free the fukken shit boi
+    SDL_FreeSurface(status);
+    SDL_DestroyTexture(texture);
 }
 
 void draw_background(SDL_Renderer* renderer, Game* gptr)
