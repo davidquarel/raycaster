@@ -1,6 +1,6 @@
 #include "texture.h"
 
-void init_texture(
+void init_xor_texture(
     Game* gptr,
     SDL_Color textures[256][256])
 {

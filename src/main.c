@@ -50,8 +50,8 @@ int main(void) //int argc, char** argv)
 
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
-    const int TEX_WIDTH = game.texture_height;
-    const int TEX_HEIGHT = game.texture_width;
+    //const int TEX_WIDTH = game.texture_height;
+    //const int TEX_HEIGHT = game.texture_width;
     const double MOVE_SPEED = 0.05;
     const double TURN_SPEED = 0.05;
     // took some SDL boilerplate from the SDL wiki
@@ -86,8 +86,9 @@ int main(void) //int argc, char** argv)
     // end init section
 
     SDL_Color textures[256][256];
-
-    init_texture(&game, textures);
+    init_xor_texture(&game, textures);
+    //SDL_Color jon[256][256];
+    //init_texture_from_file(&game, jon, )
 
     while(game.run)
     {
@@ -112,14 +113,26 @@ int main(void) //int argc, char** argv)
         SDL_RenderPresent(renderer);
 	
 
-	//Busy waits are for bricks
-	//Sleeps for remaining 1/60th of a second, or just sends it if it's behind	
-	double end = clock();
+        //Busy waits are for bricks
+        //Sleeps for remaining 1/60th of a second, or just sends it if it's behind	
+        double end = clock();
 
-//	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
-	const struct timespec sleeptime = {0, max(0,16777777L - ((long)((end-start) * 1000)))};
-//	const struct timespec sleeptime = {0, 16777777L};
-        nanosleep(&sleeptime, NULL); 
+        // if computed in under 1/60 of a second
+        if( (end - start) < CLOCKS_PER_SEC / 60)
+        {
+            //	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
+            const struct timespec sleeptime = {0, max(0,16777777L - ((long)((end-start) * 1000)))};
+            //	const struct timespec sleeptime = {0, 16777777L};
+            nanosleep(&sleeptime, NULL); 
+            game.fps = 60;
+        }
+        else
+        {
+            game.fps =  CLOCKS_PER_SEC / (end - start);
+        }
+        
+
+	
     }
     // test for quit
     SDL_DestroyRenderer(renderer);

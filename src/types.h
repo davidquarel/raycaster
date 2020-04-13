@@ -35,6 +35,7 @@ typedef struct {
     int window_height;
     int texture_height;
     int texture_width;
+    double fps;
 } Game;
 
 
