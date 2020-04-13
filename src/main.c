@@ -96,15 +96,13 @@ int main(void) //int argc, char** argv)
             draw_status(renderer, stat_surf, stat_txt, font, &game, status_buf);
         SDL_RenderPresent(renderer);
 	
-        //TODO: game only updates upon keypress
-        //Make it run at constant 60fps, use keyboard and mouse to look around
 
 	//Busy waits are for bricks
-	
+	//Sleeps for remaining 1/60th of a second, or just sends it if it's behind	
 	double end = clock();
 
 //	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
-	const struct timespec sleeptime = {0, 16777777L - ((long)((end-start) * 1000))};
+	const struct timespec sleeptime = {0, max(0,16777777L - ((long)((end-start) * 1000)))};
 //	const struct timespec sleeptime = {0, 16777777L};
         nanosleep(&sleeptime, NULL); 
     }
