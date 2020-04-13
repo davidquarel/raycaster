@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-const int STEP_SIZE = 0.001;
+const double STEP_SIZE = 0.001;
 
 Coord bad_cast_ray(Coord pos, double theta, World world)
 {
