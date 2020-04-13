@@ -4,6 +4,8 @@ Raycaster in C by David Quarel
 
 ![Picture of Raycaster](img/demo.gif)
 
+![Texture Mapping](img/demo_texture.png)
+
 # Dependencies
 ```
 Ubuntu:
