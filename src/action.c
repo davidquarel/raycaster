@@ -27,7 +27,7 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	}	
 	if (keystate[SDL_SCANCODE_RIGHT]){
 		cur_theta += tspeed;
-		if (cur_theta > 0){
+		if (cur_theta > 2*PI){
 			cur_theta -= 2*PI;
 		}
 		gptr -> me -> theta = cur_theta;
