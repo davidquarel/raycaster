@@ -20,17 +20,25 @@ int main(void) //int argc, char** argv)
 {
     // begin init section
 
-    World world  =  {"############",
-                     "#          #",
-                     "#    #     #",
-                     "### ##     #",
-                     "#         ##",
-                     "#  ##  #   #",
-                     "#    #   # #",
-                     "############"};
+    World world  =  {"################################",
+                     "#                              #",
+                     "#       ##   #       #         #",
+                     "#                         #    #",
+                     "#   #                          #",
+                     "#            #     ##          #",
+                     "#      #           #     #     #",
+                     "#          #                   #",
+                     "#                    #         #",
+                     "#    #                         #",
+                     "#             ##        #      #",
+                     "#     ##                       #",
+                     "#                 #            #",
+                     "#       ###             ##     #",
+                     "#                              #",
+                     "################################"};
 
-    Map map =   {.width = 12,
-                 .height = 8,
+    Map map =   {.width = 32,
+                 .height = 16,
                  .world = &world};
 
     Player me = {.pos = {.x = 1.5, .y = 1.5},
@@ -42,7 +50,7 @@ int main(void) //int argc, char** argv)
                  .me = &me,
                  .mm_toggle = true,
                  .status_toggle = true,
-                 .mm_size = 40,
+                 .mm_size = 20,
                  .run = true,
                  .window_width = 1024,
                  .window_height = 768,

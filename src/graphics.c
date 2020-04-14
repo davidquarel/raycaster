@@ -118,7 +118,7 @@ void draw_walls(SDL_Renderer* renderer,
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
         // Percentage of wall brightness in [0,1]
-        double color_scale = dist_to_color(dist) / 255.0;
+        //double color_scale = dist_to_color(dist) / 255.0;
         
         // denotes how far along the current block
         // the ray struck, between 0 and 1
@@ -160,9 +160,9 @@ void draw_walls(SDL_Renderer* renderer,
             SDL_Color val = textures[tex_x][tex_y];
 
             // darken the wall based on distance
-            val.r = (int) (color_scale * val.r);
-            val.g = (int) (color_scale * val.g);
-            val.b = (int) (color_scale * val.b);
+            //val.r = (int) (color_scale * val.r);
+            //val.g = (int) (color_scale * val.g);
+            //val.b = (int) (color_scale * val.b);
 
             // compute frame buffer offset
             size_t off = WINDOW_WIDTH * y * 4 + x * 4;
