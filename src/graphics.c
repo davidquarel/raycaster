@@ -86,8 +86,10 @@ void draw_walls(SDL_Renderer* renderer,
         TEX_WIDTH, TEX_HEIGHT        
         );
 
-    // each element is 
     unsigned char frame_buf[WINDOW_WIDTH * WINDOW_HEIGHT * 4];
+    // wipe framebuf
+    memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
+
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
@@ -115,7 +117,7 @@ void draw_walls(SDL_Renderer* renderer,
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
 
-        double darken = dist_to_color(dist) / 255.0;
+        //double darken = dist_to_color(dist) / 255.0;
         
         // denotes how far along the current block
         // the ray struck, between 0 and 1
@@ -131,9 +133,9 @@ void draw_walls(SDL_Renderer* renderer,
             double wall_frac = (ycurr - y_bot) / height;
             int tex_y = (int) (wall_frac * TEX_HEIGHT); 
             SDL_Color val = textures[tex_x][tex_y];
-            val.r = (int) (darken * val.r);
-            val.g = (int) (darken * val.g);
-            val.b = (int) (darken * val.b);
+            // val.r = (int) (darken * val.r);
+            // val.g = (int) (darken * val.g);
+            // val.b = (int) (darken * val.b);
             size_t offset = 4 * (TEX_WIDTH * y + x);
             frame_buf[offset + 0] = val.b;
             frame_buf[offset + 1] = val.g;
@@ -145,5 +147,7 @@ void draw_walls(SDL_Renderer* renderer,
         }
     }
     SDL_UpdateTexture(texture, NULL, frame_buf, WINDOW_WIDTH * 4);
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_DestroyTexture(texture);
 }

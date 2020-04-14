@@ -20,18 +20,28 @@ int main(void) //int argc, char** argv)
 {
     // begin init section
 
-    World world  =  {"############",
-                     "#          #",
-                     "#    #     #",
-                     "### ##     #",
-                     "#         ##",
-                     "#  ##  #   #",
-                     "#    #   # #",
-                     "############"};
+    World world = {"#####",
+                   "#   #",
+                   "# # #",
+                   "#   #",
+                   "#####"};
 
-    Map map =   {.width = 12,
-                 .height = 8,
-                 .world = &world};
+    Map map =   {.width = 5,
+                .height = 5,
+                .world = &world};
+
+    // World world  =  {"############",
+    //                  "#          #",
+    //                  "#    #     #",
+    //                  "### ##     #",
+    //                  "#         ##",
+    //                  "#  ##  #   #",
+    //                  "#    #   # #",
+    //                  "############"};
+
+    // Map map =   {.width = 12,
+    //              .height = 8,
+    //              .world = &world};
 
     Player me = {.pos = {.x = 1.5, .y = 1.5},
                  .theta = PI/6.0,
