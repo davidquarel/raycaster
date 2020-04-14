@@ -118,6 +118,7 @@ int main(void) //int argc, char** argv)
             draw_status(renderer, stat_surf, stat_txt, font, &game, status_buf);
         }
             
+        // update screen
         SDL_RenderPresent(renderer);
 	
 

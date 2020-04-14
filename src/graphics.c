@@ -78,15 +78,24 @@ void draw_walls(SDL_Renderer* renderer,
     World* worldptr = gptr -> map -> world;
     Player me = *(gptr -> me);
 
-    //flush_framebuffer(SDL_Color* framebuf);
+    SDL_Texture* texture = SDL_CreateTexture
+        (
+        renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_STREAMING,
+        TEX_WIDTH, TEX_HEIGHT        
+        );
+
+    // each element is 
+    unsigned char frame_buf[WINDOW_WIDTH * WINDOW_HEIGHT * 4];
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
     // cast a ray for each vertical lines in the window
-    for (int col = 0; col < WINDOW_WIDTH; col++)
+    for (int x= 0; x< WINDOW_WIDTH; x++)
     {
         Coord ray_collide = cast_ray(me.pos, ray_theta, *worldptr);
-        rayhit[col] = ray_collide; //remember where ray strikes wall
+        rayhit[x] = ray_collide; //remember where ray strikes wall
         double dist = euclid_dist(me.pos, ray_collide);
 
         // multiply distance by cos(ray_angle - me_angle)
@@ -125,8 +134,16 @@ void draw_walls(SDL_Renderer* renderer,
             val.r = (int) (darken * val.r);
             val.g = (int) (darken * val.g);
             val.b = (int) (darken * val.b);
-            SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
-            SDL_RenderDrawPoint(renderer, col, y);
+            size_t offset = 4 * (TEX_WIDTH * y + x);
+            frame_buf[offset + 0] = val.b;
+            frame_buf[offset + 1] = val.g;
+            frame_buf[offset + 2] = val.r;
+            frame_buf[offset + 3] = SDL_ALPHA_OPAQUE;
+            
+            //SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
+            //SDL_RenderDrawPoint(renderer, x, y);
         }
     }
+    SDL_UpdateTexture(texture, NULL, frame_buf, WINDOW_WIDTH * 4);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
 }
