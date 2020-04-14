@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Rayhit cast_ray(Coord pos, double theta, World world)
+Rayhit cast_ray(Coord pos, double theta, Map* map)
 {
+    char* world = map -> world;
+    int WORLD_WIDTH = map -> width;
     Rayhit ray;
     Coord u = pos; //ray origin
 
@@ -39,7 +41,7 @@ Rayhit cast_ray(Coord pos, double theta, World world)
 
     // loop should always run at least once
     // as the player can't be inside a wall
-    while(world[y][x] != '#')
+    while(world[y * WORLD_WIDTH + x] != '#')
     {
         if(tMaxX < tMaxY)
         {

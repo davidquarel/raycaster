@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef const char* World[];
+typedef char* World;
 
 typedef struct {
     int width;

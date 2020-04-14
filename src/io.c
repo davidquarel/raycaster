@@ -1,6 +1,12 @@
 #include "io.h"
 #include "util.h"
 
+// void read_map(Map* map, FILE* mapfile)
+// {
+//     int width = 0;
+//     int height = 0;
+// }
+
 void print_game_status(Game* gptr, char* str)
 {
     sprintf(str, "x:      %.2f\n"

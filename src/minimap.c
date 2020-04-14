@@ -29,7 +29,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
     {
         for (int y = 0; y < WORLD_HEIGHT; y ++)
         {
-            if((*worldptr)[y][x] == '#')
+            if((*worldptr)[y * WORLD_WIDTH + x] == '#')
             {
                 wall.x = (x + off.x) * MM_SIZE;
                 wall.y = (y + off.y) * MM_SIZE;
