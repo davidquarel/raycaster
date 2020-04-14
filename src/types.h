@@ -31,10 +31,10 @@ typedef struct {
     bool status_toggle;
     int mm_size;
     bool run;
-    int window_width;
-    int window_height;
-    int texture_height;
-    int texture_width;
+    const int window_width;
+    const int window_height;
+    const int texture_height;
+    const int texture_width;
     double fps;
 } Game;
 
