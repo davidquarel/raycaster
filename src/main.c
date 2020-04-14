@@ -20,34 +20,18 @@ int main(void) //int argc, char** argv)
 {
     // begin init section
 
-    //FILE* mapfile = fopen("map/map1.txt");
-    //Map map; 
-    //read_map(map, mapfile);
+    World world  =  {"############",
+                     "#          #",
+                     "#    #     #",
+                     "### ##     #",
+                     "#         ##",
+                     "#  ##  #   #",
+                     "#    #   # #",
+                     "############"};
 
-    char world[64*64];
-
-    for (int i = 0; i < 64; i ++)
-    {
-        world[i * 64]  = '#';     //north barrier
-        world[i * 64 + 63] = '#';     //south barrier
-        world[i]  = '#';     //west barrier
-        world[63 + i] = '#';     //south barrier
-    }
-        
-    // random generate interior of map
-
-    for (int x = 1; x < 63; x++)
-    {
-        for (int y = 1; y < 63; y++)
-        {
-            world[x*64 + y] = ' ';
-        }
-    }
-
-    Map map =   {.width = 64,
-                 .height = 64,
-                 .world = world};
-
+    Map map =   {.width = 12,
+                 .height = 8,
+                 .world = &world};
 
     Player me = {.pos = {.x = 1.5, .y = 1.5},
                  .theta = PI/6.0,

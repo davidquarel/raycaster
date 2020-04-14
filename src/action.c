@@ -64,10 +64,7 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	}
 	// Undo movement if it would result in player being
     // inside a wall
-	int xi = (int) cpos.x;
-	int yi =  (int) cpos.y;
-	int WORLD_WIDTH = gptr -> map -> width;
-	if( (*(gptr -> map -> world))[yi * WORLD_WIDTH + xi] != '#'){
+	if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#'){
 		gptr -> me -> pos = cpos;
 	}
 }
