@@ -83,10 +83,10 @@ void draw_walls(SDL_Renderer* renderer,
         renderer,
         SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING,
-        TEX_WIDTH, TEX_HEIGHT        
+        WINDOW_WIDTH, WINDOW_HEIGHT        
         );
 
-    unsigned char frame_buf[WINDOW_WIDTH * WINDOW_HEIGHT * 4];
+    Uint8 frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH * 4];
     // wipe framebuf
     memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
 
@@ -96,6 +96,9 @@ void draw_walls(SDL_Renderer* renderer,
     // cast a ray for each vertical lines in the window
     for (int x= 0; x< WINDOW_WIDTH; x++)
     {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(renderer);
+        
         Coord ray_collide = cast_ray(me.pos, ray_theta, *worldptr);
         rayhit[x] = ray_collide; //remember where ray strikes wall
         double dist = euclid_dist(me.pos, ray_collide);
@@ -112,7 +115,7 @@ void draw_walls(SDL_Renderer* renderer,
 
         // only draw the part of the wall in the view area
         int y1 = max(0, y_bot);
-        int y2 = min(WINDOW_HEIGHT, y_top);
+        int y2 = min(WINDOW_HEIGHT-1, y_top);
 
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
@@ -136,11 +139,11 @@ void draw_walls(SDL_Renderer* renderer,
             // val.r = (int) (darken * val.r);
             // val.g = (int) (darken * val.g);
             // val.b = (int) (darken * val.b);
-            size_t offset = 4 * (TEX_WIDTH * y + x);
-            frame_buf[offset + 0] = val.b;
-            frame_buf[offset + 1] = val.g;
-            frame_buf[offset + 2] = val.r;
-            frame_buf[offset + 3] = SDL_ALPHA_OPAQUE;
+            size_t off = WINDOW_WIDTH * y * 4 + x * 4;
+            frame_buf[off + 0] = val.b;
+            frame_buf[off + 1] = val.g;
+            frame_buf[off + 2] = val.r;
+            frame_buf[off + 3] = SDL_ALPHA_OPAQUE;
             
             //SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
             //SDL_RenderDrawPoint(renderer, x, y);
