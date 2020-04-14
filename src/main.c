@@ -20,28 +20,18 @@ int main(void) //int argc, char** argv)
 {
     // begin init section
 
-    World world = {"#####",
-                   "#   #",
-                   "# # #",
-                   "#   #",
-                   "#####"};
+    World world  =  {"############",
+                     "#          #",
+                     "#    #     #",
+                     "### ##     #",
+                     "#         ##",
+                     "#  ##  #   #",
+                     "#    #   # #",
+                     "############"};
 
-    Map map =   {.width = 5,
-                .height = 5,
-                .world = &world};
-
-    // World world  =  {"############",
-    //                  "#          #",
-    //                  "#    #     #",
-    //                  "### ##     #",
-    //                  "#         ##",
-    //                  "#  ##  #   #",
-    //                  "#    #   # #",
-    //                  "############"};
-
-    // Map map =   {.width = 12,
-    //              .height = 8,
-    //              .world = &world};
+    Map map =   {.width = 12,
+                 .height = 8,
+                 .world = &world};
 
     Player me = {.pos = {.x = 1.5, .y = 1.5},
                  .theta = PI/6.0,
@@ -92,7 +82,7 @@ int main(void) //int argc, char** argv)
 
     // this will be used for drawing rays
     // on the minimap
-    Coord rayhit[WINDOW_WIDTH];
+    Rayhit rays[WINDOW_WIDTH];
     char status_buf[120];
 
     // end init section
@@ -116,10 +106,10 @@ int main(void) //int argc, char** argv)
         move_player(&game, MOVE_SPEED, TURN_SPEED);
         //Render the game
         draw_background(renderer, &game);
-        draw_walls(renderer, &game, rayhit, textures);
+        draw_walls(renderer, &game, rays, textures);
 
         if(game.mm_toggle)
-            draw_minimap(renderer, &game, rayhit, WINDOW_WIDTH);
+            draw_minimap(renderer, &game, rays);
 	    
         //printf("%s\n", status_buf);
         if(game.status_toggle)

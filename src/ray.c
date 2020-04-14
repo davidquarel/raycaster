@@ -5,22 +5,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-const double STEP_SIZE = 0.001;
-
-Coord bad_cast_ray(Coord pos, double theta, World world)
+Rayhit cast_ray(Coord pos, double theta, World world)
 {
-    Coord scan = {pos.x, pos.y};
-    while (world[(size_t) scan.y][(size_t) scan.x] != '#')
-    {
-        scan.x += STEP_SIZE * cos(theta);
-        scan.y += STEP_SIZE * sin(theta);
-    }
-
-    return scan;
-}
-
-Coord cast_ray(Coord pos, double theta, World world)
-{
+    Rayhit ray;
     Coord u = pos; //ray origin
 
     //unit vector in direction of ray travel
@@ -76,24 +63,50 @@ Coord cast_ray(Coord pos, double theta, World world)
 
     if(horz_hit)
     {
-        if(stepX == 1)      // colliding left wall
-            hit.x = x;      
-        else
-            hit.x = x+1;    // colliding right wall
-
+        if(stepX == 1)      // colliding west wall
+        {
+            hit.x = x;
+            ray.dir = WEST;
+        }               
+        else                // colliding east wall
+        {
+            hit.x = x+1;
+            ray.dir = EAST;
+        }
         t = (hit.x - u.x) / v.x;
         hit.y = u.y + t*v.y;
     }
     else
     {
-        if(stepY == 1)      // colliding bottom wall
+        if(stepY == 1)      // colliding south wall
+        {
             hit.y = y;
-        else
-            hit.y = y+1;    // colliding top wall
+            ray.dir = SOUTH;
+        }
+        else                // colliding north wall
+        {
+            hit.y = y+1;
+            ray.dir = NORTH;
+        }
+                
 
         t = (hit.y - u.y) / v.y;
         hit.x = u.x + t*v.x;
     }
     //printf("hit %.2f %2f\n, dist %.2f", hit.x, hit.y, t);
-    return hit;
+    ray.pos = hit;
+    return ray;
 }
+
+// const double STEP_SIZE = 0.001;
+// Coord bad_cast_ray(Coord pos, double theta, World world)
+// {
+//     Coord scan = {pos.x, pos.y};
+//     while (world[(size_t) scan.y][(size_t) scan.x] != '#')
+//     {
+//         scan.x += STEP_SIZE * cos(theta);
+//         scan.y += STEP_SIZE * sin(theta);
+//     }
+
+//     return scan;
+// }

@@ -2,13 +2,15 @@
 #include "util.h"
 #include "types.h"
 
-void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays)
+void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
 {
     //enable transparancy
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     int WORLD_WIDTH = gptr -> map -> width;
     int WORLD_HEIGHT = gptr -> map -> height;
+    int WINDOW_WIDTH = gptr -> window_width;
+    
     int MM_SIZE = gptr -> mm_size; //minimap scaling factor
 
     // draw minimap
@@ -45,12 +47,12 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Coord rays[], int num_rays
     SDL_SetRenderDrawColor(renderer, 255,     255,  0,  128);
 
     // only draw every 20th ray to save on CPU
-    for (int i = 0; i < num_rays; i += 20)
+    for (int i = 0; i < WINDOW_WIDTH; i += 20)
     {
         SDL_RenderDrawLine(renderer, (int) (me.pos.x * MM_SIZE),
                                      (int) (me.pos.y * MM_SIZE),
-                                     (int) ((rays[i].x + off.x) * MM_SIZE),
-                                     (int) ((rays[i].y + off.y) * MM_SIZE));
+                                     (int) ((rays[i].pos.x + off.x) * MM_SIZE),
+                                     (int) ((rays[i].pos.y + off.y) * MM_SIZE));
     }
 
      // draw player as an arrow

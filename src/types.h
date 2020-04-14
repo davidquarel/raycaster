@@ -38,5 +38,11 @@ typedef struct {
     double fps;
 } Game;
 
+typedef enum Direction {NORTH, EAST, SOUTH, WEST} Direction;
+
+typedef struct {
+    Coord pos;
+    Direction dir;
+} Rayhit;
 
 #endif

@@ -67,7 +67,7 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
 
 void draw_walls(SDL_Renderer* renderer, 
                 Game* gptr, 
-                Coord* rayhit,
+                Rayhit* rays,
                 SDL_Color textures[256][256])
 {
     const int WINDOW_WIDTH = gptr -> window_width;
@@ -78,7 +78,7 @@ void draw_walls(SDL_Renderer* renderer,
     World* worldptr = gptr -> map -> world;
     Player me = *(gptr -> me);
 
-    SDL_Texture* texture = SDL_CreateTexture
+    SDL_Texture* walls = SDL_CreateTexture
         (
         renderer,
         SDL_PIXELFORMAT_ARGB8888,
@@ -94,63 +94,91 @@ void draw_walls(SDL_Renderer* renderer,
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
     // cast a ray for each vertical lines in the window
-    for (int x= 0; x< WINDOW_WIDTH; x++)
-    {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
-        
-        Coord ray_collide = cast_ray(me.pos, ray_theta, *worldptr);
-        rayhit[x] = ray_collide; //remember where ray strikes wall
-        double dist = euclid_dist(me.pos, ray_collide);
+    for (int x = 0; x < WINDOW_WIDTH; x++)
+    {   
+        Rayhit rayhit = cast_ray(me.pos, ray_theta, *worldptr);
+        rays[x] = rayhit; //remember where ray strikes wall
+        double dist = euclid_dist(me.pos, rayhit.pos);
 
+        // size of wall inversely proprtional to distance
         // multiply distance by cos(ray_angle - me_angle)
         // to correct for fisheye effect
         double scale_factor =  1 / (dist * cos(ray_theta - me.theta));
 
-        int height = (int) (WINDOW_HEIGHT * scale_factor);
+        double height = WINDOW_HEIGHT * scale_factor;
 
         // wall may extend well outside view area
-        int y_bot = (WINDOW_HEIGHT  - height)/2;
-        int y_top = (WINDOW_HEIGHT  + height)/2;
+        double y_bot = (WINDOW_HEIGHT  - height)/2;
+        double y_top = (WINDOW_HEIGHT  + height)/2;
 
         // only draw the part of the wall in the view area
-        int y1 = max(0, y_bot);
-        int y2 = min(WINDOW_HEIGHT-1, y_top);
+        int y1 = (int) fmax(0, y_bot);
+        int y2 = (int) fmin(WINDOW_HEIGHT, y_top);
 
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
-
-        //double darken = dist_to_color(dist) / 255.0;
+        // Percentage of wall brightness in [0,1]
+        double color_scale = dist_to_color(dist) / 255.0;
         
         // denotes how far along the current block
         // the ray struck, between 0 and 1
-        double block_fraction =
-            fmax( ray_collide.x - ((int) ray_collide.x),
-                 ray_collide.y - ((int) ray_collide.y));
+        double block_fraction = 0;
+        
+        // flip fraction if NORTH or WEST wall
+        // to ensure texture is painted left to right
+        switch(rayhit.dir)
+        {
+            case NORTH: 
+                block_fraction = 1 - rayhit.pos.x + ((int) rayhit.pos.x);
+                break;
+
+            case EAST:
+                block_fraction = rayhit.pos.y - ((int) rayhit.pos.y);
+                break;
+
+            case SOUTH:
+                block_fraction = rayhit.pos.x - ((int) rayhit.pos.x);
+                break;
+            
+            case WEST:
+                block_fraction = 1 - rayhit.pos.y + ((int) rayhit.pos.y);
+                break;
+
+            default:
+                break;
+        }
     
         int tex_x = (int) (TEX_WIDTH * block_fraction);
 
-        for (int y = y1; y <= y2; y++)
+        // drawing verticle lines to make up wall
+        for (int y = y1; y < y2; y++)
         {   
-            double ycurr = (double) y;
-            double wall_frac = (ycurr - y_bot) / height;
-            int tex_y = (int) (wall_frac * TEX_HEIGHT); 
+            //how far along verticle line
+            double y_frac = (y - y_bot) / height; 
+            int tex_y = (int) (y_frac * TEX_HEIGHT);
+ 
             SDL_Color val = textures[tex_x][tex_y];
-            // val.r = (int) (darken * val.r);
-            // val.g = (int) (darken * val.g);
-            // val.b = (int) (darken * val.b);
+
+            // darken the wall based on distance
+            val.r = (int) (color_scale * val.r);
+            val.g = (int) (color_scale * val.g);
+            val.b = (int) (color_scale * val.b);
+
+            // compute frame buffer offset
             size_t off = WINDOW_WIDTH * y * 4 + x * 4;
+
+            // store pixel in frame buffer
             frame_buf[off + 0] = val.b;
             frame_buf[off + 1] = val.g;
             frame_buf[off + 2] = val.r;
             frame_buf[off + 3] = SDL_ALPHA_OPAQUE;
-            
-            //SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
-            //SDL_RenderDrawPoint(renderer, x, y);
         }
     }
-    SDL_UpdateTexture(texture, NULL, frame_buf, WINDOW_WIDTH * 4);
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_DestroyTexture(texture);
+    SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
+    
+    // sky and floor peeks through unpainted area
+    SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
+    
+    SDL_RenderCopy(renderer, walls, NULL, NULL);
+    SDL_DestroyTexture(walls);
 }
