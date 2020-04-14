@@ -51,6 +51,20 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
     SDL_RenderFillRect(renderer, &back);
 }
 
+// // store as array of lines
+// SDL_Color framebuf[1024][768];
+
+// void flush_framebuffer(SDL_Color* fbuf)
+// {
+//     for (x = 0; x < 1024; x ++)
+//     {
+//         for (y = 0; y < 768; y ++)
+//         {
+//             fbuf[x][y].a = 0;
+//         }
+//     }
+// }
+
 void draw_walls(SDL_Renderer* renderer, 
                 Game* gptr, 
                 Coord* rayhit,
@@ -63,6 +77,8 @@ void draw_walls(SDL_Renderer* renderer,
 
     World* worldptr = gptr -> map -> world;
     Player me = *(gptr -> me);
+
+    //flush_framebuffer(SDL_Color* framebuf);
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
@@ -90,8 +106,7 @@ void draw_walls(SDL_Renderer* renderer,
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
 
-        int color = dist_to_color(dist);
-        SDL_SetRenderDrawColor(renderer, color,     color,  color,  0);
+        double darken = dist_to_color(dist) / 255.0;
         
         // denotes how far along the current block
         // the ray struck, between 0 and 1
@@ -107,6 +122,9 @@ void draw_walls(SDL_Renderer* renderer,
             double wall_frac = (ycurr - y_bot) / height;
             int tex_y = (int) (wall_frac * TEX_HEIGHT); 
             SDL_Color val = textures[tex_x][tex_y];
+            val.r = (int) (darken * val.r);
+            val.g = (int) (darken * val.g);
+            val.b = (int) (darken * val.b);
             SDL_SetRenderDrawColor(renderer, val.r, val.b, val.g, val.a);
             SDL_RenderDrawPoint(renderer, col, y);
         }
