@@ -18,9 +18,12 @@ void print_game_status(Game* gptr, char* str)
             gptr -> fps);
 }
 
-void read_ppm_to_textures(FILE* ppm, SDL_Color textures[256][256])
+void read_ppm_to_textures(FILE* ppm, uint32_t textures[256][256])
 {
     // assume image is 256*256 with 8 bit colour
+
+    SDL_Color_Union tmp;
+
     char header[14];
     if(!fread(header, sizeof(header),1, ppm))
     {
@@ -36,11 +39,17 @@ void read_ppm_to_textures(FILE* ppm, SDL_Color textures[256][256])
             {
                 printf("io.c: reading ppm error at index x=%d y=%d\n", x, y);
             }
-                
-            textures[y][x].r = rgb[1];
-            textures[y][x].g = rgb[2];
-            textures[y][x].b = rgb[0];
-            textures[y][x].a = 0;
+            // TODO: Work out why you have to put them in this order
+            // I just played with it till it worked
+            tmp.color.r = rgb[2];
+            tmp.color.g = rgb[0];
+            tmp.color.b = rgb[1];
+            tmp.color.a = SDL_ALPHA_OPAQUE;
+            textures[x][y] = tmp.all;
+            // textures[x][y].r = rgb[2];
+            // textures[x][y].g = rgb[0];
+            // textures[x][y].b = rgb[1];
+            // textures[x][y].a = SDL_ALPHA_OPAQUE;
         }    
     }
 }

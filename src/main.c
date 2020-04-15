@@ -94,7 +94,7 @@ int main(void) //int argc, char** argv)
 
     // end init section
 
-    SDL_Color textures[256][256];
+    uint32_t textures[256][256];
 
     FILE* jon_ppm = fopen("img/jon_P6.ppm", "rb");
     

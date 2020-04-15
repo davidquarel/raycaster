@@ -11,7 +11,7 @@ void draw_background(SDL_Renderer* renderer, Game* gptr);
 void draw_walls(SDL_Renderer* renderer, 
                 Game* gptr, 
                 Rayhit* rayhit,
-                SDL_Color textures[256][256]);
+                uint32_t textures[256][256]);
 
 void draw_status(   SDL_Renderer* renderer, 
                     SDL_Surface* surface, 

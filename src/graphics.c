@@ -67,7 +67,7 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
 void draw_walls(SDL_Renderer* renderer, 
                 Game* gptr, 
                 Rayhit* rays,
-                SDL_Color textures[256][256])
+                uint32_t textures[256][256])
 {
     const int WINDOW_WIDTH = gptr -> window_width;
     const int WINDOW_HEIGHT = gptr -> window_height;
@@ -84,7 +84,7 @@ void draw_walls(SDL_Renderer* renderer,
         WINDOW_WIDTH, WINDOW_HEIGHT        
         );
 
-    Uint8 frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH * 4];
+    uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
     // wipe framebuf
     memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
 
@@ -154,22 +154,18 @@ void draw_walls(SDL_Renderer* renderer,
             //how far along verticle line
             double y_frac = (y - y_bot) / height; 
             int tex_y = (int) (y_frac * TEX_HEIGHT);
- 
-            SDL_Color val = textures[tex_x][tex_y];
 
             // darken the wall based on distance
+            // Will no longer work with current types
             //val.r = (int) (color_scale * val.r);
             //val.g = (int) (color_scale * val.g);
             //val.b = (int) (color_scale * val.b);
 
             // compute frame buffer offset
-            size_t off = WINDOW_WIDTH * y * 4 + x * 4;
+            size_t off = WINDOW_WIDTH * y + x;
 
             // store pixel in frame buffer
-            frame_buf[off + 0] = val.b;
-            frame_buf[off + 1] = val.g;
-            frame_buf[off + 2] = val.r;
-            frame_buf[off + 3] = SDL_ALPHA_OPAQUE;
+            frame_buf[off] = textures[tex_y][tex_x];
         }
     }
     SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);

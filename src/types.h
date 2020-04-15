@@ -2,6 +2,8 @@
 #define _TYPES_H
 
 #include <stdbool.h>
+#include <stdint.h>
+#include <SDL2/SDL_render.h>
 
 typedef const char* World;
 
@@ -44,5 +46,12 @@ typedef struct {
     Coord pos;
     Direction dir;
 } Rayhit;
+
+// used to push entire pixels into framebuffer quickll,
+// rather than one color component at a time
+typedef union {
+    uint32_t all;
+    SDL_Color color;
+} SDL_Color_Union;
 
 #endif
