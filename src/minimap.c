@@ -17,8 +17,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
     SDL_SetRenderDrawColor(renderer, 255,    255,  255,  128);
 
 
-    World* worldptr = gptr -> map -> world;
-    char (*world)[WORLD_WIDTH] = worldptr;
+    World world = gptr -> map -> world;
 
     Coord off = gptr -> mm_offset;
 
@@ -32,7 +31,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
     {
         for (int y = 0; y < WORLD_HEIGHT; y ++)
         {
-            if(world[y][x] == '#')
+            if(world[y * WORLD_WIDTH + x] == '#')
             {
                 wall.x = (x + off.x) * MM_SIZE;
                 wall.y = (y + off.y) * MM_SIZE;

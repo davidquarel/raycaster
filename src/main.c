@@ -39,7 +39,7 @@ int main(void) //int argc, char** argv)
 
     Map map =   {.width = 32,
                  .height = 16,
-                 .world = &world};
+                 .world = world};
 
     Player me = {.pos = {.x = 1.5, .y = 1.5},
                  .theta = PI/6.0,

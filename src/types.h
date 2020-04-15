@@ -8,7 +8,7 @@ typedef const char* World;
 typedef struct {
     int width;
     int height;
-    World* world;
+    World world;
 } Map;
 
 

@@ -7,11 +7,8 @@
 
 Rayhit cast_ray(Coord pos, double theta, Map* map)
 {
-
-    int WORLD_HEIGHT = map -> height;
     int WORLD_WIDTH  = map -> width;
-    World* worldptr     = map -> world;
-    char (*world)[WORLD_HEIGHT][WORLD_WIDTH] = worldptr;
+    World world      = map -> world;
 
     Rayhit ray;
     Coord u = pos; //ray origin
@@ -45,7 +42,7 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
 
     // loop should always run at least once
     // as the player can't be inside a wall
-    while((*world)[y][x] != '#')
+    while(world[y * WORLD_WIDTH + x] != '#')
     {
         if(tMaxX < tMaxY)
         {
