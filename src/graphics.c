@@ -99,8 +99,6 @@ void draw_walls(SDL_Renderer* renderer,
 		double y_top;
 	}Walldata;
 
-	Walldata geometry[WINDOW_WIDTH];
-	
 	for (int x = 0; x < WINDOW_WIDTH; x++){
 		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
 		ray_theta += theta_inc; //move theta for next ray to cast
@@ -111,13 +109,16 @@ void draw_walls(SDL_Renderer* renderer,
 	for (int x = 0; x < WINDOW_WIDTH; x++){
 		Rayhit cur_ray = rays[x];
 		Walldata cur_wall;
+		
 		cur_wall.distance = euclid_dist(me.pos,cur_ray.pos);
 		cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_theta - me.theta)));	
+		
 		ray_theta += theta_inc; //move theta for next ray to cast
+		
 		cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
 		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
 
-		double block_fraction;
+		double block_fraction = 0;
 		switch(cur_ray.dir){
 		case NORTH: 
                 	block_fraction = 1 - cur_ray.pos.x + ((int) cur_ray.pos.x);
@@ -140,13 +141,8 @@ void draw_walls(SDL_Renderer* renderer,
         	}
     
         	cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
-		geometry[x] = cur_wall;
-
-	}
-	
-	
-	for (int x = 0; x < WINDOW_WIDTH; x++){
-	        Walldata cur_wall = geometry[x];
+		
+		
 		double y1 = fmax(0, cur_wall.y_bot);
 	        double y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
         // drawing verticle lines to make up wall
