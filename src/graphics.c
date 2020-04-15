@@ -5,8 +5,8 @@
 #include "color.h"
 #include "minimap.h"
 
-
 void draw_status(   SDL_Renderer* renderer, 
+                    SDL_Surface* surface, 
                     TTF_Font* font, 
                     Game* gptr, 
                     char* str)
@@ -16,8 +16,7 @@ void draw_status(   SDL_Renderer* renderer,
     // draw some text for game stats
     // http://gigi.nullneuron.net/gigilabs/displaying-text-in-sdl2-with-sdl_ttf/
     SDL_Color white = {255,255,255,128};
-    SDL_Surface* surface 
-        = TTF_RenderText_Blended_Wrapped(font, str, white, WINDOW_WIDTH / 4);
+    surface = TTF_RenderText_Blended_Wrapped(font, str, white, WINDOW_WIDTH / 4);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     int texW = 0;
     int texH = 0;
@@ -87,8 +86,28 @@ void draw_walls(SDL_Renderer* renderer,
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
     // wipe framebuf
+<<<<<<< HEAD
     for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
         frame_buf[i] = 0;
+=======
+//    memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
+
+
+    double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
+
+	typedef struct {
+		uint32_t texture_x;
+		double distance;
+		double height;
+		double y_bot;
+		double y_top;
+	}Walldata;
+
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
+		ray_theta += theta_inc; //move theta for next ray to cast
+	}
+>>>>>>> parent of f61f7eb... Merged in new graphics code and inlined utils
 
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
@@ -97,8 +116,8 @@ void draw_walls(SDL_Renderer* renderer,
     for (int x = 0; x < WINDOW_WIDTH; x++)
     {   
         Rayhit rayhit = cast_ray(me.pos, ray_theta, gptr -> map);
-        rays[x]       = rayhit; //remember where ray strikes wall
-        double dist   = euclid_dist(me.pos, rayhit.pos);
+        rays[x] = rayhit; //remember where ray strikes wall
+        double dist = euclid_dist(me.pos, rayhit.pos);
 
         // size of wall inversely proprtional to distance
         // multiply distance by cos(ray_angle - me_angle)
@@ -153,13 +172,9 @@ void draw_walls(SDL_Renderer* renderer,
         // drawing verticle lines to make up wall
         for (int y = y1; y < y2; y++)
         {   
-            // how far along verticle line
-            // y_bot needs to be cast to an integer otherwise
-	        // the fractional result from y(int) - y_bot(float) can sneak
-	        // through and cause tex_y to get set to a negative number
-            double y_frac = (y - (int)y_bot) / height; 
+            //how far along verticle line
+            double y_frac = (y - y_bot) / height; 
             int tex_y = (int) (y_frac * TEX_HEIGHT);
-            
 
             // darken the wall based on distance
             // Will no longer work with current types
@@ -169,9 +184,9 @@ void draw_walls(SDL_Renderer* renderer,
 
             // compute frame buffer offset
             size_t off = WINDOW_WIDTH * y + x;
+
             // store pixel in frame buffer
             frame_buf[off] = textures[tex_y][tex_x];
-
         }
     }
     SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);

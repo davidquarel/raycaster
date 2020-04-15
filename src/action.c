@@ -11,7 +11,6 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	//Grab the state of the keyboard
 	const uint8_t *keystate = SDL_GetKeyboardState(NULL);
 	Coord cpos = gptr -> me -> pos;
-	Coord last_pos = cpos;
 	double x = 0;
 	double y = 0;
 	double cur_theta = gptr -> me -> theta;
@@ -71,13 +70,7 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	
 	int xi = (int) cpos.x;
 	int yi = (int) cpos.y;
-	if(world[yi * WORLD_WIDTH + (int)last_pos.x] != '#'){
-		gptr -> me -> pos.y = cpos.y;
+	if(world[yi * WORLD_WIDTH + xi] != '#'){
+		gptr -> me -> pos = cpos;
 	}
-	if(world[(int)last_pos.y * WORLD_WIDTH + xi] != '#'){
-		gptr -> me -> pos.x = cpos.x;
-	}
-//	if(world[yi * WORLD_WIDTH + xi] != '#'){
-//		gptr -> me -> pos = cpos;
-//	}
 }

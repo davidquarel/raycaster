@@ -14,6 +14,7 @@ void draw_walls(SDL_Renderer* renderer,
                 uint32_t textures[256][256]);
 
 void draw_status(   SDL_Renderer* renderer, 
+                    SDL_Surface* surface, 
                     TTF_Font* font, 
                     Game* gptr, 
                     char* str);
