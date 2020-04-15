@@ -91,7 +91,95 @@ void draw_walls(SDL_Renderer* renderer,
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
-    // cast a ray for each vertical lines in the window
+	struct {
+		uint32_t texture_x;
+		double distance;
+		double y_bot;
+		double y_top;
+	}Walldata
+
+	Walldata geometry[WINDOW_WIDTH];
+	
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
+		ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
+	}
+
+	ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
+	
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+		Rayhit cur_ray = rays[x];
+		Walldata cur_wall = geometry[x];
+		cur_wall.distance = euclid_dist(me.pos,cur_ray.pos);
+		double renderheight = WINDOW_HEIGHT * (1 / (dist * cos(ray_theta - me.theta)));	
+		ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
+		cur_wall.y_bot = (WINDOW_HEIGHT - height);
+		cur_wall.y_top = (WINDOW_HEIGHT + height);
+
+		double block_fraction;
+		switch(cur_ray.dir){
+		case NORTH: 
+                	block_fraction = 1 - cur_ray.pos.x + ((int) cur_ray.pos.x);
+                break;
+
+		case EAST:
+                	block_fraction = cur_ray.pos.y - ((int) cur_ray.pos.y);
+                break;
+
+            	case SOUTH:
+                	block_fraction = cur_ray.pos.x - ((int) cur_ray.pos.x);
+                break;
+            
+            	case WEST:
+                	block_fraction = 1 - cur_ray.pos.y + ((int) cur_ray.pos.y);
+                break;
+
+            	default:
+                break;
+        	}
+    
+        	cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
+
+
+	}
+
+
+        // only draw the part of the wall in the view area
+        double y1 = fmax(0, y_bot);
+        double y2 = fmin(WINDOW_HEIGHT, y_top);
+
+
+        // Percentage of wall brightness in [0,1]
+        //double color_scale = dist_to_color(dist) / 255.0;
+        
+        // denotes how far along the current block
+        // the ray struck, between 0 and 1
+        
+        // flip fraction if NORTH or WEST wall
+        // to ensure texture is painted left to right
+        
+        // drawing verticle lines to make up wall
+        for (double y = y1; y < y2; y++)
+        {   
+            //how far along verticle line
+            double y_frac = (y - y_bot) / height; 
+            int tex_y = (int) (y_frac * TEX_HEIGHT);
+
+            // darken the wall based on distance
+            // Will no longer work with current types
+            //val.r = (int) (color_scale * val.r);
+            //val.g = (int) (color_scale * val.g);
+            //val.b = (int) (color_scale * val.b);
+
+            // compute frame buffer offset
+            size_t off = WINDOW_WIDTH * y + x;
+
+            // store pixel in frame buffer
+            frame_buf[off] = textures[tex_y][tex_x];
+        }
+    }
+/*  
+        // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
     {   
         Rayhit rayhit = cast_ray(me.pos, ray_theta, gptr -> map);
@@ -110,8 +198,8 @@ void draw_walls(SDL_Renderer* renderer,
         double y_top = (WINDOW_HEIGHT  + height)/2;
 
         // only draw the part of the wall in the view area
-        int y1 = (int) fmax(0, y_bot);
-        int y2 = (int) fmin(WINDOW_HEIGHT, y_top);
+        double y1 = fmax(0, y_bot);
+        double y2 = fmin(WINDOW_HEIGHT, y_top);
 
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
@@ -149,7 +237,7 @@ void draw_walls(SDL_Renderer* renderer,
         int tex_x = (int) (TEX_WIDTH * block_fraction);
 
         // drawing verticle lines to make up wall
-        for (int y = y1; y < y2; y++)
+        for (double y = y1; y < y2; y++)
         {   
             //how far along verticle line
             double y_frac = (y - y_bot) / height; 
@@ -168,6 +256,7 @@ void draw_walls(SDL_Renderer* renderer,
             frame_buf[off] = textures[tex_y][tex_x];
         }
     }
+*/
     SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
     
     // sky and floor peeks through unpainted area
