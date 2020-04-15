@@ -75,7 +75,6 @@ void draw_walls(SDL_Renderer* renderer,
     const int TEX_WIDTH = gptr -> texture_width;
     const int TEX_HEIGHT = gptr -> texture_height;
 
-    World* worldptr = gptr -> map -> world;
     Player me = *(gptr -> me);
 
     SDL_Texture* walls = SDL_CreateTexture
@@ -96,7 +95,7 @@ void draw_walls(SDL_Renderer* renderer,
     // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
     {   
-        Rayhit rayhit = cast_ray(me.pos, ray_theta, *worldptr);
+        Rayhit rayhit = cast_ray(me.pos, ray_theta, gptr -> map);
         rays[x] = rayhit; //remember where ray strikes wall
         double dist = euclid_dist(me.pos, rayhit.pos);
 

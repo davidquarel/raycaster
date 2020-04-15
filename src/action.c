@@ -14,6 +14,7 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	double x = 0;
 	double y = 0;
 	double cur_theta = gptr -> me -> theta;
+	int WORLD_WIDTH = gptr -> map -> width;
 
         // rotate left
         // keep theta in [0, 2*PI)
@@ -64,7 +65,12 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	}
 	// Undo movement if it would result in player being
     // inside a wall
-	if( (*(gptr -> map -> world))[(int) cpos.y][(int) cpos.x] != '#'){
+	World world = gptr -> map -> world;
+    //char (*world)[WORLD_WIDTH] = worldptr;
+	
+	int xi = (int) cpos.x;
+	int yi = (int) cpos.y;
+	if(world[yi * WORLD_WIDTH + xi] != '#'){
 		gptr -> me -> pos = cpos;
 	}
 }
