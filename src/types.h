@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef const char* World[];
+typedef const char* World;
 
 typedef struct {
     int width;
@@ -31,9 +31,18 @@ typedef struct {
     bool status_toggle;
     int mm_size;
     bool run;
-    int window_width;
-    int window_height;
+    const int window_width;
+    const int window_height;
+    const int texture_height;
+    const int texture_width;
+    double fps;
 } Game;
 
+typedef enum Direction {NORTH, EAST, SOUTH, WEST} Direction;
+
+typedef struct {
+    Coord pos;
+    Direction dir;
+} Rayhit;
 
 #endif
