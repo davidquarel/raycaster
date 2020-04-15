@@ -74,8 +74,8 @@ void draw_walls(SDL_Renderer* renderer,
     const int WINDOW_HEIGHT = gptr -> window_height;
     const int TEX_WIDTH = gptr -> texture_width;
     const int TEX_HEIGHT = gptr -> texture_height;
-
     Player me = *(gptr -> me);
+	const double theta_inc = me.fov / WINDOW_WIDTH;
 
     SDL_Texture* walls = SDL_CreateTexture
         (
@@ -85,15 +85,86 @@ void draw_walls(SDL_Renderer* renderer,
         WINDOW_WIDTH, WINDOW_HEIGHT        
         );
 
-    uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
-    // wipe framebuf
-    for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
-        frame_buf[i] = 0;
-
+    uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH]; //wiped later in a
+    //vaguely intelligent way
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
-    // cast a ray for each vertical lines in the window
+	typedef struct {
+		uint32_t texture_x;
+		double distance;
+		double height;
+		double y_bot;
+		double y_top;
+	}Walldata;
+
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
+		ray_theta += theta_inc; //move theta for next ray to cast
+	}
+
+	ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
+	
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+		Rayhit cur_ray = rays[x];
+		Walldata cur_wall;
+		
+		cur_wall.distance = euclid_dist(me.pos,cur_ray.pos);
+		cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_theta - me.theta)));	
+		
+		ray_theta += theta_inc; //move theta for next ray to cast
+		
+		cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
+		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
+
+		double block_fraction = 0;
+		switch(cur_ray.dir){
+		case NORTH: 
+                	block_fraction = 1 - cur_ray.pos.x + ((int) cur_ray.pos.x);
+                break;
+
+		case EAST:
+                	block_fraction = cur_ray.pos.y - ((int) cur_ray.pos.y);
+                break;
+
+            	case SOUTH:
+                	block_fraction = cur_ray.pos.x - ((int) cur_ray.pos.x);
+                break;
+            
+            	case WEST:
+                	block_fraction = 1 - cur_ray.pos.y + ((int) cur_ray.pos.y);
+                break;
+
+            	default:
+                break;
+        	}
+    
+        	cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
+		
+		
+		double y1 = fmax(0, cur_wall.y_bot);
+	        double y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
+        // drawing verticle lines to make up wall
+	//
+	// TODO: Refactor so we're not doing muls every loop iteration lmao
+        	for (int y = y1; y < y2; y++){   
+        	       //how far along verticle line
+	        	double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
+        		int tex_y = (int) (y_frac * TEX_HEIGHT);
+                	size_t off = WINDOW_WIDTH * y + x;
+	                // store pixel in frame buffer
+            		frame_buf[off] = textures[tex_y][cur_wall.texture_x];
+        	}
+
+        	for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH){
+            		frame_buf[y] = 0; 
+		}
+		for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH){   
+            		frame_buf[y] = 0; 
+		}
+    	}
+/*  
+        // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
     {   
         Rayhit rayhit = cast_ray(me.pos, ray_theta, gptr -> map);
@@ -112,8 +183,8 @@ void draw_walls(SDL_Renderer* renderer,
         double y_top = (WINDOW_HEIGHT  + height)/2;
 
         // only draw the part of the wall in the view area
-        int y1 = (int) fmax(0, y_bot);
-        int y2 = (int) fmin(WINDOW_HEIGHT, y_top);
+        double y1 = fmax(0, y_bot);
+        double y2 = fmin(WINDOW_HEIGHT, y_top);
 
         ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
 
@@ -151,7 +222,7 @@ void draw_walls(SDL_Renderer* renderer,
         int tex_x = (int) (TEX_WIDTH * block_fraction);
 
         // drawing verticle lines to make up wall
-        for (int y = y1; y < y2; y++)
+        for (double y = y1; y < y2; y++)
         {   
             // how far along verticle line
             // y_bot needs to be cast to an integer otherwise
@@ -174,6 +245,7 @@ void draw_walls(SDL_Renderer* renderer,
 
         }
     }
+*/
     SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
     
     // sky and floor peeks through unpainted area
