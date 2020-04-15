@@ -11,7 +11,7 @@ Raycaster in C by David Quarel, Jon Connor
 Ubuntu:
 	sudo apt-get install make gcc libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev
 Arch:
-	pacman -S sdl2 sdl2_gfx sdl2_ttf sdl2_image 
+	pacman -S sdl2 sdl2_gfx sdl2_ttf sdl2_image sdl2_mixer 
 ```
 
 # How to run
