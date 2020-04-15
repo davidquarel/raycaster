@@ -75,7 +75,7 @@ void draw_walls(SDL_Renderer* renderer,
     const int TEX_WIDTH = gptr -> texture_width;
     const int TEX_HEIGHT = gptr -> texture_height;
     Player me = *(gptr -> me);
-	const double theta_inc = me.fov / WINDOW_WIDTH;
+	const double theta_inc = me.fov / (WINDOW_WIDTH/2);
 
     SDL_Texture* walls = SDL_CreateTexture
         (
@@ -100,14 +100,14 @@ void draw_walls(SDL_Renderer* renderer,
 		double y_top;
 	}Walldata;
 
-	for (int x = 0; x < WINDOW_WIDTH; x++){
+	for (int x = 0; x < WINDOW_WIDTH; x+= 2){
 		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
 		ray_theta += theta_inc; //move theta for next ray to cast
 	}
 
 	ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
 	
-	for (int x = 0; x < WINDOW_WIDTH; x++){
+	for (int x = 0; x < WINDOW_WIDTH; x+= 2){
 		Rayhit cur_ray = rays[x];
 		Walldata cur_wall;
 		
@@ -156,6 +156,7 @@ void draw_walls(SDL_Renderer* renderer,
                 	size_t off = WINDOW_WIDTH * y + x;
 	                // store pixel in frame buffer
             		frame_buf[off] = textures[tex_y][cur_wall.texture_x];
+            		frame_buf[off+1] = textures[tex_y][cur_wall.texture_x];
         	}
 /*
         	for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH){
