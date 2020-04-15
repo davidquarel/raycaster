@@ -87,7 +87,7 @@ void draw_walls(SDL_Renderer* renderer,
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
     // wipe framebuf
-//    memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
+    memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
 
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
@@ -152,19 +152,20 @@ void draw_walls(SDL_Renderer* renderer,
         	for (int y = y1; y < y2; y++){   
         	       //how far along verticle line
 	        	double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
-        		int tex_y = (int) (y_frac * TEX_HEIGHT);
+        		int tex_y = max(min((int) (y_frac * TEX_HEIGHT),255),0);
                 	size_t off = WINDOW_WIDTH * y + x;
 	                // store pixel in frame buffer
             		frame_buf[off] = textures[tex_y][cur_wall.texture_x];
         	}
-
+/*
         	for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH){
             		frame_buf[y] = 0; 
 		}
 		for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH){   
             		frame_buf[y] = 0; 
 		}
-    	}
+*/
+	}
 
     SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
     
