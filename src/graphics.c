@@ -147,7 +147,6 @@ void draw_walls(SDL_Renderer* renderer,
 	
 	for (int x = 0; x < WINDOW_WIDTH; x++){
 	        Walldata cur_wall = geometry[x];
-		printf("%d, %lf, %lf, %lf, %lf \n",cur_wall.texture_x,cur_wall.distance,cur_wall.height,cur_wall.y_bot,cur_wall.y_top);	
 		double y1 = fmax(0, cur_wall.y_bot);
 	        double y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
         // drawing verticle lines to make up wall
