@@ -165,6 +165,19 @@ void draw_walls(SDL_Renderer* renderer,
             		frame_buf[y] = 0; 
 		}
     	}
+
+    SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
+    
+    // sky and floor peeks through unpainted area
+    SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
+    
+    SDL_RenderCopy(renderer, walls, NULL, NULL);
+    SDL_DestroyTexture(walls);
+}
+
+//Old render code
+
+
 /*  
         // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
@@ -248,11 +261,3 @@ void draw_walls(SDL_Renderer* renderer,
         }
     }
 */
-    SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
-    
-    // sky and floor peeks through unpainted area
-    SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
-    
-    SDL_RenderCopy(renderer, walls, NULL, NULL);
-    SDL_DestroyTexture(walls);
-}

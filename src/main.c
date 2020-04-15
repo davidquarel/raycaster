@@ -75,6 +75,8 @@ int main(void) //int argc, char** argv)
     SDL_SetWindowTitle(window, "raycaster");
     SDL_RenderClear(renderer);
 
+//    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "2"); //magical anti-aliasing command
+
     // initalise fonts
     TTF_Init();
     TTF_Font* font = TTF_OpenFont("font/Hack-Regular.ttf", 14);
