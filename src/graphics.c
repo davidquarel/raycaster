@@ -7,7 +7,6 @@
 
 void draw_status(   SDL_Renderer* renderer, 
                     SDL_Surface* surface, 
-                    SDL_Texture* texture, 
                     TTF_Font* font, 
                     Game* gptr, 
                     char* str)
@@ -18,7 +17,7 @@ void draw_status(   SDL_Renderer* renderer,
     // http://gigi.nullneuron.net/gigilabs/displaying-text-in-sdl2-with-sdl_ttf/
     SDL_Color white = {255,255,255,128};
     surface = TTF_RenderText_Blended_Wrapped(font, str, white, WINDOW_WIDTH / 4);
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     int texW = 0;
     int texH = 0;
     //ask for the size of rectangle required to fit the text
