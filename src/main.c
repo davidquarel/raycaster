@@ -69,9 +69,6 @@ int main(void) //int argc, char** argv)
     SDL_Renderer* renderer;
     SDL_Window* window;
 
-    // for drawing the status
-    SDL_Surface* stat_surf = NULL;
-
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
@@ -122,7 +119,7 @@ int main(void) //int argc, char** argv)
         if(game.status_toggle)
         {
             print_game_status(&game, status_buf);
-            draw_status(renderer, stat_surf, font, &game, status_buf);
+            draw_status(renderer, font, &game, status_buf);
         }
             
         // update screen
@@ -153,7 +150,6 @@ int main(void) //int argc, char** argv)
     // test for quit
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_FreeSurface(stat_surf);
     //IMG_Quit();
     TTF_Quit();
     SDL_Quit();
