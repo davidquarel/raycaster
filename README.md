@@ -1,6 +1,6 @@
 # raycaster
 
-Raycaster in C by David Quarel
+Raycaster in C by David Quarel, Jon Connor
 
 ![Picture of Raycaster](img/demo.gif)
 
@@ -44,16 +44,19 @@ distortion after correcting for fisheye effect. Investigate cause and fix.
 * Make movement adjust player acceleration rather than velocity, and add friction
  so player movement feels more natural as compared to abrupt movement.
 * ~~Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
-it to run at 30/60fps, and you hold WASD to constantly move in that direction,~~
-and look using the mouse. Half-Done
+it to run at 30/60fps, and you hold WASD to constantly move in that direction.~~
+DONE
+* Add mouselook.
 * ~~Learn how to and then implement texture mapping.~~ ~~Grey walls are boring~~ ~~Stripey
-walls are less boring.~~ Done, but it needs to be more efficient.
+walls are less boring.~~ ~~Done, but it needs to be more efficient.~~ DONE
 * ~~Don't draw walls outside view area.~~ Done? Needs to be verified.
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
 * ~~Add collisions with walls~~ DONE
 * Change the format for texture mapping rather than reinventing the wheel.
 * Change the format of the map to have different kinds of walls that are
 texture mapped in different ways.
+* Adjust collision behaviour so you walk along a wall rather than
+stopping immediately when you touch a wall.
 
 # TODO Someday
 * Add something for the player to interact with (items, monsters)
