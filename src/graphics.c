@@ -91,12 +91,13 @@ void draw_walls(SDL_Renderer* renderer,
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
-	struct {
+	typedef struct {
 		uint32_t texture_x;
 		double distance;
+		double height;
 		double y_bot;
 		double y_top;
-	}Walldata
+	}Walldata;
 
 	Walldata geometry[WINDOW_WIDTH];
 	
@@ -111,10 +112,10 @@ void draw_walls(SDL_Renderer* renderer,
 		Rayhit cur_ray = rays[x];
 		Walldata cur_wall = geometry[x];
 		cur_wall.distance = euclid_dist(me.pos,cur_ray.pos);
-		double renderheight = WINDOW_HEIGHT * (1 / (dist * cos(ray_theta - me.theta)));	
+		cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_theta - me.theta)));	
 		ray_theta += me.fov / WINDOW_WIDTH; //move theta for next ray to cast
-		cur_wall.y_bot = (WINDOW_HEIGHT - height);
-		cur_wall.y_top = (WINDOW_HEIGHT + height);
+		cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
+		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
 
 		double block_fraction;
 		switch(cur_ray.dir){
@@ -139,45 +140,26 @@ void draw_walls(SDL_Renderer* renderer,
         	}
     
         	cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
-
+		geometry[x] = cur_wall;
 
 	}
-
-
-        // only draw the part of the wall in the view area
-        double y1 = fmax(0, y_bot);
-        double y2 = fmin(WINDOW_HEIGHT, y_top);
-
-
-        // Percentage of wall brightness in [0,1]
-        //double color_scale = dist_to_color(dist) / 255.0;
-        
-        // denotes how far along the current block
-        // the ray struck, between 0 and 1
-        
-        // flip fraction if NORTH or WEST wall
-        // to ensure texture is painted left to right
-        
+	
+	
+	for (int x = 0; x < WINDOW_WIDTH; x++){
+	        Walldata cur_wall = geometry[x];
+		printf("%d, %lf, %lf, %lf, %lf \n",cur_wall.texture_x,cur_wall.distance,cur_wall.height,cur_wall.y_bot,cur_wall.y_top);	
+		double y1 = fmax(0, cur_wall.y_bot);
+	        double y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
         // drawing verticle lines to make up wall
-        for (double y = y1; y < y2; y++)
-        {   
-            //how far along verticle line
-            double y_frac = (y - y_bot) / height; 
-            int tex_y = (int) (y_frac * TEX_HEIGHT);
-
-            // darken the wall based on distance
-            // Will no longer work with current types
-            //val.r = (int) (color_scale * val.r);
-            //val.g = (int) (color_scale * val.g);
-            //val.b = (int) (color_scale * val.b);
-
-            // compute frame buffer offset
-            size_t off = WINDOW_WIDTH * y + x;
-
-            // store pixel in frame buffer
-            frame_buf[off] = textures[tex_y][tex_x];
-        }
-    }
+        	for (int y = y1; y < y2; y++){   
+        	       //how far along verticle line
+	        	double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
+        		int tex_y = (int) (y_frac * TEX_HEIGHT);
+                	size_t off = WINDOW_WIDTH * y + x;
+	                // store pixel in frame buffer
+            		frame_buf[off] = textures[tex_y][cur_wall.texture_x];
+        	}
+    	}
 /*  
         // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
