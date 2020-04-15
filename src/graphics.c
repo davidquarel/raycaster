@@ -152,7 +152,10 @@ void draw_walls(SDL_Renderer* renderer,
         for (int y = y1; y < y2; y++)
         {   
             //how far along verticle line
-            double y_frac = (y - y_bot) / height; 
+	    //y_bot needs to be cast to an integer otherwise
+	    //the fractional result from y(int) - y_bot(float) can sneak
+	    //through and cause tex_y to get set to a negative number
+            double y_frac = (y - (int)y_bot) / height; 
             int tex_y = (int) (y_frac * TEX_HEIGHT);
 
             // darken the wall based on distance
