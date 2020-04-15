@@ -86,7 +86,7 @@ void draw_walls(SDL_Renderer* renderer,
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
     // wipe framebuf
-    memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
+//    memset(frame_buf, 0, WINDOW_WIDTH * WINDOW_HEIGHT * 4);
 
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
@@ -154,6 +154,13 @@ void draw_walls(SDL_Renderer* renderer,
 	                // store pixel in frame buffer
             		frame_buf[off] = textures[tex_y][cur_wall.texture_x];
         	}
+
+        	for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH){
+            		frame_buf[y] = 0; 
+		}
+		for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH){   
+            		frame_buf[y] = 0; 
+		}
     	}
 /*  
         // cast a ray for each vertical lines in the window
