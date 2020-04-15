@@ -146,6 +146,8 @@ void draw_walls(SDL_Renderer* renderer,
 		double y1 = fmax(0, cur_wall.y_bot);
 	        double y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
         // drawing verticle lines to make up wall
+	//
+	// TODO: Refactor so we're not doing muls every loop iteration lmao
         	for (int y = y1; y < y2; y++){   
         	       //how far along verticle line
 	        	double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
