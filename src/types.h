@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_mixer.h>
 
 typedef const char* World;
 
@@ -26,9 +27,17 @@ typedef struct {
 } Player;
 
 typedef struct {
+    Mix_Chunk** footstep;
+    size_t num_footstep;
+    bool footstep_busy;
+    double footstep_time;
+} SFX;
+
+typedef struct {
     Coord mm_offset;
     Map* map;
     Player* me;
+    SFX* sfx;
     bool mm_toggle;
     bool status_toggle;
     int mm_size;

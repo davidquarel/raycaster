@@ -1,5 +1,6 @@
 #include "action.h"
 #include "util.h"
+#include <SDL2/SDL_mixer.h>
 
 void move_player(Game* gptr, double mspeed, double tspeed)
 {
@@ -70,7 +71,14 @@ void move_player(Game* gptr, double mspeed, double tspeed)
 	
 	int xi = (int) cpos.x;
 	int yi = (int) cpos.y;
-	if(world[yi * WORLD_WIDTH + xi] != '#'){
+	if(world[yi * WORLD_WIDTH + xi] != '#')
+	{
 		gptr -> me -> pos = cpos;
+
+		// play one of many footstep noises
+
+			//Mix_PlayChannel( -1, (gptr->sfx->footstep)[0], 0 );
+
+	
 	}
 }

@@ -2,10 +2,11 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <assert.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-// #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "types.h"
 #include "util.h"
@@ -15,6 +16,7 @@
 #include "minimap.h"
 #include "action.h"
 #include "texture.h"
+#include "game_sfx.h"
 
 int main(void) //int argc, char** argv)
 {
@@ -56,6 +58,8 @@ int main(void) //int argc, char** argv)
                  .window_height = 768,
                  .texture_height = 256,
                  .texture_width = 256};
+    
+    SFX sfx;
 
     const int WINDOW_WIDTH = game.window_width;
     const int WINDOW_HEIGHT = game.window_height;
@@ -69,11 +73,14 @@ int main(void) //int argc, char** argv)
     SDL_Renderer* renderer;
     SDL_Window* window;
 
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_SetWindowTitle(window, "raycaster");
     SDL_RenderClear(renderer);
+    assert(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) >= 0);
+    sfx_init(&sfx);
+    game.sfx = &sfx;
 
     // initalise fonts
     TTF_Init();
@@ -101,7 +108,7 @@ int main(void) //int argc, char** argv)
     
     //SDL_Color jon[256][256];
     //init_texture_from_file(&game, jon, )
-
+    uint64_t loop = 0;
     while(game.run)
     {
         double start = clock();
@@ -130,6 +137,11 @@ int main(void) //int argc, char** argv)
         //Sleeps for remaining 1/60th of a second, or just sends it if it's behind	
         double end = clock();
 
+        // if(end - sfx.footstep_time > CLOCKS_PER_SEC)
+        // {
+        //     sfx.footstep_time = end;
+        //     sfx.footstep_busy = false;
+        // }
         // if computed in under 1/60 of a second
         if( (end - start) < CLOCKS_PER_SEC / 60)
         {
@@ -137,20 +149,20 @@ int main(void) //int argc, char** argv)
             const struct timespec sleeptime = {0, max(0,16777777L - ((long)((end-start) * 1000)))};
             //	const struct timespec sleeptime = {0, 16777777L};
             nanosleep(&sleeptime, NULL); 
-            game.fps = 60;
+            
         }
-        else
-        {
+        if(loop % 10 == 0)
             game.fps =  CLOCKS_PER_SEC / (end - start);
-        }
-        
 
+        
+        loop ++;
 	
     }
     // test for quit
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     //IMG_Quit();
+    sfx_free(&sfx);
     TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
