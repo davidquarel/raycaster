@@ -149,19 +149,19 @@ void draw_walls(SDL_Renderer* renderer,
         cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
 		
 		
-		int y1 = fmax(0, cur_wall.y_bot);
-	    int y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
+		const int y1 = fmax(0, cur_wall.y_bot);
+	    const int y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
         // drawing verticle lines to make up wall
 	//
 	// TODO: Refactor so we're not doing muls every loop iteration lmao
 
         uint32_t* frame_buf_plus_x = frame_buf + x;
-
+        
         for (int y = y1; y < y2; y++)
         {   
             //how far along verticle line
-            double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
-            int tex_y = (int) (y_frac * TEX_HEIGHT);
+            const double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
+            const int tex_y = (int) (y_frac * TEX_HEIGHT);
             // store pixel in frame buffer
             frame_buf_plus_x[WINDOW_WIDTH * y] = textures[tex_y][cur_wall.texture_x];
         }
