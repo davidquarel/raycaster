@@ -111,7 +111,7 @@ int main(void) //int argc, char** argv)
         //Process SDL events (User input, etc)
         check_event(&event, &game);
         move_player(&game, MOVE_SPEED, TURN_SPEED);
-        //Render the game
+        //Render the game 
         draw_background(renderer, &game);
         draw_walls(renderer, &game, rays, textures);
 
