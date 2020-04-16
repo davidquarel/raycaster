@@ -87,9 +87,8 @@ void draw_walls(SDL_Renderer* renderer,
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
     // wipe framebuf
-    memset(frame_buf, 0, sizeof(frame_buf));
-    // for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
-    //     frame_buf[i] = 0;
+    for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
+        frame_buf[i] = 0;
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
