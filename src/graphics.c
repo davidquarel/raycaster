@@ -28,6 +28,8 @@ void draw_status(   SDL_Renderer* renderer,
     SDL_FreeSurface(surface);
 }
 
+
+
 void draw_background(SDL_Renderer* renderer, 
                     Game* gptr, 
                     uint32_t texture[256][256])
@@ -35,23 +37,78 @@ void draw_background(SDL_Renderer* renderer,
 
     int const WINDOW_HEIGHT = gptr -> window_height;
     int const WINDOW_WIDTH = gptr -> window_width;
+    int const TILE_FACTOR = 2;
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
+    // wipe frame_buf
+    for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
+        frame_buf[i] = 0;
 
-    // compute direction for leftmost/rightmost rays
-    Coord front = gptr -> me -> pos;
-    front.x += cos(gptr -> me -> theta);
-    front.y += sin(gptr -> me -> theta);
+    // SDL_Rect floor_mask = {  .w = WINDOW_WIDTH, 
+    //                     .h = WINDOW_HEIGHT / 2,
+    //                     .x = 0, .y = WINDOW_HEIGHT / 2};
 
-    Coord leftray = rotate_about(gptr -> me, front, (gptr -> me -> fov) / 2);
-    Coord rightray = rotate_about(gptr -> me, front, - (gptr -> me -> fov) / 2);
-
-    for (int y = 0; y < WINDOW_HEIGHT / 2; y++)
+    SDL_Texture* back = SDL_CreateTexture
+        (
+        renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_STREAMING,
+        WINDOW_WIDTH, WINDOW_HEIGHT        
+        );
+    
+    // how high the player's viewpoint is
+    double c = 0.25;
+        
+    for (int y = 0; y < WINDOW_HEIGHT/2; y++)
     {
-        // compute y relative to the horizon
-        int p = y - WINDOW_HEIGHT / 2;
+        double l = (double) (WINDOW_HEIGHT / 2);
+        // h in [0,1], how far the current y value is down the
+        // botton half of the screen
+        double h = y / l;
+        if(h <= 0)
+            continue;
+        
+        // horizontal distance to where ray struck floor from player 
+        double d = c / (1-h);
+
+        // appraent distance to floor from player's eyes
+        double dist = sqrt(c*c + d*d);
+
+        int yoff = WINDOW_WIDTH * y;
+        int tex_y = (TILE_FACTOR*y) % 256;
+
+        int half = WINDOW_WIDTH * WINDOW_HEIGHT / 2;
+        int end =  WINDOW_WIDTH * WINDOW_HEIGHT;
+
+        for(int x = 0; x < WINDOW_WIDTH/2; x++)
+        {
+            size_t offright = yoff + x + WINDOW_WIDTH / 2;
+            size_t offleft = yoff + (WINDOW_WIDTH/2 - x);
+            int tex_x = ((int) (TILE_FACTOR * x * dist)) % 256;
+            
+            // fill top right
+            frame_buf[offright] = texture[tex_y][tex_x];
+            // fill top left
+            frame_buf[offleft] = texture[tex_y][tex_x];
+
+            // mirror the sky to get the floor
+            
+            frame_buf[end - offright] = texture[tex_y][tex_x];
+            // fill top left
+            frame_buf[end - offleft] = texture[tex_y][tex_x];
+
+        }
     }
 
+
+    SDL_UpdateTexture(back, NULL, frame_buf, WINDOW_WIDTH * 4);
+    
+    // sky and floor peeks through unpainted area
+    SDL_SetTextureBlendMode(back, SDL_BLENDMODE_BLEND);
+    
+    SDL_RenderCopy(renderer, back, NULL, NULL); //&floor_mask);
+    SDL_DestroyTexture(back);
+}
 
     // top half of screen is blue sky
     // SDL_Rect back;
@@ -66,7 +123,6 @@ void draw_background(SDL_Renderer* renderer,
     // back.y = WINDOW_HEIGHT / 2;
     // SDL_SetRenderDrawColor(renderer, 0, 127, 0, 0); //dark green
     // SDL_RenderFillRect(renderer, &back);
-}
 
 // // store as array of lines
 // SDL_Color framebuf[1024][768];

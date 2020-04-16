@@ -112,7 +112,7 @@ int main(void) //int argc, char** argv)
         check_event(&event, &game);
         move_player(&game, MOVE_SPEED, TURN_SPEED);
         //Render the game 
-        draw_background(renderer, &game);
+        draw_background(renderer, &game, textures);
         draw_walls(renderer, &game, rays, textures);
 
         if(game.mm_toggle)

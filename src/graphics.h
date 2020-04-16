@@ -8,8 +8,8 @@
 
 //void draw_status(SDL_Renderer* renderer, Game* gptr);
 void draw_background(SDL_Renderer* renderer, 
-                    Game* gptrm, 
-                    uint32_t textture[256][256]);
+                    Game* gptr, 
+                    uint32_t texture[256][256]);
 
 void draw_walls(SDL_Renderer* renderer, 
                 Game* gptr, 
