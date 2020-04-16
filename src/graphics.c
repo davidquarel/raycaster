@@ -28,26 +28,44 @@ void draw_status(   SDL_Renderer* renderer,
     SDL_FreeSurface(surface);
 }
 
-void draw_background(SDL_Renderer* renderer, Game* gptr)
+void draw_background(SDL_Renderer* renderer, 
+                    Game* gptr, 
+                    uint32_t texture[256][256])
 {
 
     int const WINDOW_HEIGHT = gptr -> window_height;
     int const WINDOW_WIDTH = gptr -> window_width;
 
+    uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
+
+    // compute direction for leftmost/rightmost rays
+    Coord front = gptr -> me -> pos;
+    front.x += cos(gptr -> me -> theta);
+    front.y += sin(gptr -> me -> theta);
+
+    Coord leftray = rotate_about(gptr -> me, front, (gptr -> me -> fov) / 2);
+    Coord rightray = rotate_about(gptr -> me, front, - (gptr -> me -> fov) / 2);
+
+    for (int y = 0; y < WINDOW_HEIGHT / 2; y++)
+    {
+        // compute y relative to the horizon
+        int p = y - WINDOW_HEIGHT / 2;
+    }
+
 
     // top half of screen is blue sky
-    SDL_Rect back;
-    back.w = WINDOW_WIDTH;
-    back.h = WINDOW_HEIGHT / 2;
-    back.x = 0;
-    back.y = 0;
-    SDL_SetRenderDrawColor(renderer, 0, 0, 127, 0); //dark blue
-    SDL_RenderFillRect(renderer, &back);
+    // SDL_Rect back;
+    // back.w = WINDOW_WIDTH;
+    // back.h = WINDOW_HEIGHT / 2;
+    // back.x = 0;
+    // back.y = 0;
+    // SDL_SetRenderDrawColor(renderer, 0, 0, 127, 0); //dark blue
+    // SDL_RenderFillRect(renderer, &back);
 
-    // bottom half of screen is green grass
-    back.y = WINDOW_HEIGHT / 2;
-    SDL_SetRenderDrawColor(renderer, 0, 127, 0, 0); //dark green
-    SDL_RenderFillRect(renderer, &back);
+    // // bottom half of screen is green grass
+    // back.y = WINDOW_HEIGHT / 2;
+    // SDL_SetRenderDrawColor(renderer, 0, 127, 0, 0); //dark green
+    // SDL_RenderFillRect(renderer, &back);
 }
 
 // // store as array of lines

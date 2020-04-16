@@ -37,9 +37,11 @@ inline Coord rotatec(Coord p, double theta)
     return new;
 }
 
+// Rotate vector q about vector p by theta
+// shift to origin, rotate about origin, shift back
 inline Coord rotate_about(Coord q, Coord p, double theta)
 {
-    // shift to origin, rotate about origin, shift back
+  
     Coord new = addc(rotatec(subc(q,p),theta), p);
     return new;
 }
