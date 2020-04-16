@@ -86,9 +86,10 @@ void draw_walls(SDL_Renderer* renderer,
         );
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
-    // wipe framebuf
-    for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
-        frame_buf[i] = 0;
+    memset(frame_buf, 0, sizeof(frame_buf));
+    // // wipe framebuf
+    // for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
+    //     frame_buf[i] = 0;
 
     double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
 
@@ -100,14 +101,16 @@ void draw_walls(SDL_Renderer* renderer,
 		double y_top;
 	}Walldata;
 
-	for (int x = 0; x < WINDOW_WIDTH; x++){
+	for (int x = 0; x < WINDOW_WIDTH; x++)
+    {
 		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
 		ray_theta += theta_inc; //move theta for next ray to cast
 	}
 
 	ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
 	
-	for (int x = 0; x < WINDOW_WIDTH; x++){
+	for (int x = 0; x < WINDOW_WIDTH; x++)
+    {
 		Rayhit cur_ray = rays[x];
 		Walldata cur_wall;
 		
@@ -120,52 +123,65 @@ void draw_walls(SDL_Renderer* renderer,
 		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
 
 		double block_fraction = 0;
-		switch(cur_ray.dir){
-		case NORTH: 
-                	block_fraction = 1 - cur_ray.pos.x + ((int) cur_ray.pos.x);
+		
+        switch(cur_ray.dir)
+        {
+            case NORTH: 
+                block_fraction = 1 - cur_ray.pos.x + ((int) cur_ray.pos.x);
                 break;
 
-		case EAST:
-                	block_fraction = cur_ray.pos.y - ((int) cur_ray.pos.y);
+		    case EAST:
+                block_fraction = cur_ray.pos.y - ((int) cur_ray.pos.y);
                 break;
 
-            	case SOUTH:
-                	block_fraction = cur_ray.pos.x - ((int) cur_ray.pos.x);
+            case SOUTH:
+                block_fraction = cur_ray.pos.x - ((int) cur_ray.pos.x);
                 break;
             
-            	case WEST:
-                	block_fraction = 1 - cur_ray.pos.y + ((int) cur_ray.pos.y);
+            case WEST:
+                block_fraction = 1 - cur_ray.pos.y + ((int) cur_ray.pos.y);
                 break;
 
-            	default:
+            default:
                 break;
-        	}
+        }
     
-        	cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
+        cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
 		
 		
-		double y1 = fmax(0, cur_wall.y_bot);
-	        double y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
+		int y1 = fmax(0, cur_wall.y_bot);
+	    int y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
         // drawing verticle lines to make up wall
 	//
 	// TODO: Refactor so we're not doing muls every loop iteration lmao
-        	for (int y = y1; y < y2; y++){   
-        	       //how far along verticle line
-	        	double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
-        		int tex_y = (int) (y_frac * TEX_HEIGHT);
-                	size_t off = WINDOW_WIDTH * y + x;
-	                // store pixel in frame buffer
-            		frame_buf[off] = textures[tex_y][cur_wall.texture_x];
-        	}
 
-        	for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH){
-            		frame_buf[y] = 0; 
-		}
-		for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH){   
-            		frame_buf[y] = 0; 
-		}
-    	}
-/*  
+        uint32_t* frame_buf_plus_x = frame_buf + x;
+
+        for (int y = y1; y < y2; y++)
+        {   
+            //how far along verticle line
+            double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
+            int tex_y = (int) (y_frac * TEX_HEIGHT);
+            // store pixel in frame buffer
+            frame_buf_plus_x[WINDOW_WIDTH * y] = textures[tex_y][cur_wall.texture_x];
+        }
+
+        for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH)
+            frame_buf[y] = 0; 
+		
+		for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH) 
+            frame_buf[y] = 0; 
+    }
+    SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
+
+    // sky and floor peeks through unpainted area
+    SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
+    
+    SDL_RenderCopy(renderer, walls, NULL, NULL);
+    SDL_DestroyTexture(walls);
+}
+	
+    /*  
         // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
     {   
@@ -238,17 +254,9 @@ void draw_walls(SDL_Renderer* renderer,
 
             // compute frame buffer offset
             size_t off = WINDOW_WIDTH * y + x;
-
-            // store pixel in frame buffer
+for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH) 
+            frame_buf[y] = 0; / store pixel in frame buffer
             frame_buf[off] = textures[tex_y][tex_x];
         }
     }
 */
-    SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
-    
-    // sky and floor peeks through unpainted area
-    SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
-    
-    SDL_RenderCopy(renderer, walls, NULL, NULL);
-    SDL_DestroyTexture(walls);
-}
