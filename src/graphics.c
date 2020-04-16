@@ -37,7 +37,9 @@ void draw_background(SDL_Renderer* renderer,
 
     int const WINDOW_HEIGHT = gptr -> window_height;
     int const WINDOW_WIDTH = gptr -> window_width;
-    int const TILE_FACTOR = 2;
+    int const TILE_FACTOR = 3;
+
+    Coord player = gptr -> me -> pos;
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
     // wipe frame_buf
@@ -71,11 +73,8 @@ void draw_background(SDL_Renderer* renderer,
         // horizontal distance to where ray struck floor from player 
         double d = c / (1-h);
 
-        // appraent distance to floor from player's eyes
-        double dist = sqrt(c*c + d*d);
-
         int yoff = WINDOW_WIDTH * y;
-        int tex_y = (TILE_FACTOR*y) % 256;
+        int tex_y = ((int) (TILE_FACTOR * y)) % 256;
 
         int half = WINDOW_WIDTH * WINDOW_HEIGHT / 2;
         int end =  WINDOW_WIDTH * WINDOW_HEIGHT;
@@ -84,7 +83,7 @@ void draw_background(SDL_Renderer* renderer,
         {
             size_t offright = yoff + x + WINDOW_WIDTH / 2;
             size_t offleft = yoff + (WINDOW_WIDTH/2 - x);
-            int tex_x = ((int) (TILE_FACTOR * x * dist)) % 256;
+            int tex_x = ((int) (TILE_FACTOR * x * d)) % 256;
             
             // fill top right
             frame_buf[offright] = texture[tex_y][tex_x];
