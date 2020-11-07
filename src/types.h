@@ -8,16 +8,28 @@
 typedef const char* World;
 
 typedef struct {
-    int width;
-    int height;
-    World world;
-} Map;
-
-
-typedef struct {
     double x;
     double y;
 } Coord;
+
+typedef struct {
+  Coord* points;
+  int n; //number of points
+} Polygon;
+
+typedef struct {
+  Polygon* world;
+  int size; //number of polygons in world
+  int width;
+  int height;
+} Map;
+
+// typedef struct {
+//     int width;
+//     int height;
+//     World world;
+// } Map;
+
 
 typedef struct {
     Coord pos;

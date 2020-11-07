@@ -5,10 +5,10 @@
 #include "color.h"
 #include "minimap.h"
 
-void draw_status(   SDL_Renderer* renderer, 
-                    SDL_Surface* surface, 
-                    TTF_Font* font, 
-                    Game* gptr, 
+void draw_status(   SDL_Renderer* renderer,
+                    SDL_Surface* surface,
+                    TTF_Font* font,
+                    Game* gptr,
                     char* str)
 {
     int WINDOW_WIDTH = gptr -> window_width;
@@ -21,7 +21,7 @@ void draw_status(   SDL_Renderer* renderer,
     int texW = 0;
     int texH = 0;
     //ask for the size of rectangle required to fit the text
-    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH); 
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
     SDL_Rect dstrect = {3* WINDOW_WIDTH / 4, 0, texW, texH};
     SDL_RenderCopy(renderer, texture, NULL, &dstrect);
     SDL_DestroyTexture(texture);
@@ -65,8 +65,8 @@ void draw_background(SDL_Renderer* renderer, Game* gptr)
 //     }
 // }
 
-void draw_walls(SDL_Renderer* renderer, 
-                Game* gptr, 
+void draw_walls(SDL_Renderer* renderer,
+                Game* gptr,
                 Rayhit* rays,
                 uint32_t textures[256][256])
 {
@@ -82,7 +82,7 @@ void draw_walls(SDL_Renderer* renderer,
         renderer,
         SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING,
-        WINDOW_WIDTH, WINDOW_HEIGHT        
+        WINDOW_WIDTH, WINDOW_HEIGHT
         );
 
     uint32_t frame_buf[WINDOW_HEIGHT * WINDOW_WIDTH];
@@ -102,89 +102,68 @@ void draw_walls(SDL_Renderer* renderer,
 	}Walldata;
 
 	for (int x = 0; x < WINDOW_WIDTH; x++)
-    {
+  {
 		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
 		ray_theta += theta_inc; //move theta for next ray to cast
-	}
-
-	ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
-	
-	for (int x = 0; x < WINDOW_WIDTH; x++)
-    {
-		Rayhit cur_ray = rays[x];
-		Walldata cur_wall;
-		
-		cur_wall.distance = euclid_dist(me.pos,cur_ray.pos);
-		cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_theta - me.theta)));	
-		
-		ray_theta += theta_inc; //move theta for next ray to cast
-		
-		cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
-		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
-
-		double block_fraction = 0;
-		
-        switch(cur_ray.dir)
-        {
-            case NORTH: 
-                block_fraction = 1 - cur_ray.pos.x + ((int) cur_ray.pos.x);
-                break;
-
-		    case EAST:
-                block_fraction = cur_ray.pos.y - ((int) cur_ray.pos.y);
-                break;
-
-            case SOUTH:
-                block_fraction = cur_ray.pos.x - ((int) cur_ray.pos.x);
-                break;
-            
-            case WEST:
-                block_fraction = 1 - cur_ray.pos.y + ((int) cur_ray.pos.y);
-                break;
-
-            default:
-                break;
-        }
-    
-        cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
-		
-		
-		const int y1 = fmax(0, cur_wall.y_bot);
-	    const int y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
-        // drawing verticle lines to make up wall
-	//
-	// TODO: Refactor so we're not doing muls every loop iteration lmao
-
-        uint32_t* frame_buf_plus_x = frame_buf + x;
-        
-        for (int y = y1; y < y2; y++)
-        {   
-            //how far along verticle line
-            const double y_frac = (y - cur_wall.y_bot) / cur_wall.height; 
-            const int tex_y = (int) (y_frac * TEX_HEIGHT);
-            // store pixel in frame buffer
-            frame_buf_plus_x[WINDOW_WIDTH * y] = textures[tex_y][cur_wall.texture_x];
-        }
-
-        for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH)
-            frame_buf[y] = 0; 
-		
-		for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH) 
-            frame_buf[y] = 0; 
-    }
-    SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
-
-    // sky and floor peeks through unpainted area
-    SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
-    
-    SDL_RenderCopy(renderer, walls, NULL, NULL);
-    SDL_DestroyTexture(walls);
+  }
+	// }
+  //
+	// ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
+  //
+	// for (int x = 0; x < WINDOW_WIDTH; x++)
+  //   {
+	// 	Rayhit cur_ray = rays[x];
+	// 	Walldata cur_wall;
+  //
+	// 	cur_wall.distance = euclid_dist(me.pos,cur_ray.pos);
+	// 	cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_theta - me.theta)));
+  //
+	// 	ray_theta += theta_inc; //move theta for next ray to cast
+  //
+	// 	cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
+	// 	cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
+  //
+  //   double block_fraction = 0.5;
+  //
+	//   cur_wall.texture_x = (int) (TEX_WIDTH * block_fraction);
+  //
+  //
+	// 	const int y1 = fmax(0, cur_wall.y_bot);
+	//   const int y2 = fmin(WINDOW_HEIGHT, cur_wall.y_top);
+  //       // drawing verticle lines to make up wall
+	// //
+	// // TODO: Refactor so we're not doing muls every loop iteration lmao
+  //
+  //       uint32_t* frame_buf_plus_x = frame_buf + x;
+  //
+  //       for (int y = y1; y < y2; y++)
+  //       {
+  //           //how far along verticle line
+  //           const double y_frac = (y - cur_wall.y_bot) / cur_wall.height;
+  //           const int tex_y = (int) (y_frac * TEX_HEIGHT);
+  //           // store pixel in frame buffer
+  //           frame_buf_plus_x[WINDOW_WIDTH * y] = textures[tex_y][cur_wall.texture_x];
+  //       }
+  //
+  //       for (int y = 0 + x; y < y1; y+= WINDOW_WIDTH)
+  //           frame_buf[y] = 0;
+  //
+	// 	for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH)
+  //           frame_buf[y] = 0;
+  //   }
+  //   SDL_UpdateTexture(walls, NULL, frame_buf, WINDOW_WIDTH * 4);
+  //
+  //   // sky and floor peeks through unpainted area
+  //   SDL_SetTextureBlendMode(walls, SDL_BLENDMODE_BLEND);
+  //
+  //   SDL_RenderCopy(renderer, walls, NULL, NULL);
+  //   SDL_DestroyTexture(walls);
 }
-	
-    /*  
+
+    /*
         // cast a ray for each vertical lines in the window
     for (int x = 0; x < WINDOW_WIDTH; x++)
-    {   
+    {
         Rayhit rayhit = cast_ray(me.pos, ray_theta, gptr -> map);
         rays[x] = rayhit; //remember where ray strikes wall
         double dist = euclid_dist(me.pos, rayhit.pos);
@@ -208,16 +187,16 @@ void draw_walls(SDL_Renderer* renderer,
 
         // Percentage of wall brightness in [0,1]
         //double color_scale = dist_to_color(dist) / 255.0;
-        
+
         // denotes how far along the current block
         // the ray struck, between 0 and 1
         double block_fraction = 0;
-        
+
         // flip fraction if NORTH or WEST wall
         // to ensure texture is painted left to right
         switch(rayhit.dir)
         {
-            case NORTH: 
+            case NORTH:
                 block_fraction = 1 - rayhit.pos.x + ((int) rayhit.pos.x);
                 break;
 
@@ -228,7 +207,7 @@ void draw_walls(SDL_Renderer* renderer,
             case SOUTH:
                 block_fraction = rayhit.pos.x - ((int) rayhit.pos.x);
                 break;
-            
+
             case WEST:
                 block_fraction = 1 - rayhit.pos.y + ((int) rayhit.pos.y);
                 break;
@@ -236,14 +215,14 @@ void draw_walls(SDL_Renderer* renderer,
             default:
                 break;
         }
-    
+
         int tex_x = (int) (TEX_WIDTH * block_fraction);
 
         // drawing verticle lines to make up wall
         for (double y = y1; y < y2; y++)
-        {   
+        {
             //how far along verticle line
-            double y_frac = (y - y_bot) / height; 
+            double y_frac = (y - y_bot) / height;
             int tex_y = (int) (y_frac * TEX_HEIGHT);
 
             // darken the wall based on distance
@@ -254,7 +233,7 @@ void draw_walls(SDL_Renderer* renderer,
 
             // compute frame buffer offset
             size_t off = WINDOW_WIDTH * y + x;
-for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH) 
+for (int y = y2 + x; y < WINDOW_HEIGHT; y+=WINDOW_WIDTH)
             frame_buf[y] = 0; / store pixel in frame buffer
             frame_buf[off] = textures[tex_y][tex_x];
         }

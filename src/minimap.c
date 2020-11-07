@@ -10,35 +10,32 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
     int WORLD_WIDTH = gptr -> map -> width;
     int WORLD_HEIGHT = gptr -> map -> height;
     int WINDOW_WIDTH = gptr -> window_width;
-    
+
     int MM_SIZE = gptr -> mm_size; //minimap scaling factor
 
     // draw minimap
     SDL_SetRenderDrawColor(renderer, 255,    255,  255,  128);
 
 
-    World world = gptr -> map -> world;
+    Polygon* world = gptr -> map -> world;
 
     Coord off = gptr -> mm_offset;
 
     // draw world
-    SDL_Rect wall;
-    wall.h = MM_SIZE;
-    wall.w = MM_SIZE;
 
-
-    for (int x = 0; x < WORLD_WIDTH; x ++)
-    {
-        for (int y = 0; y < WORLD_HEIGHT; y ++)
-        {
-            if(world[y * WORLD_WIDTH + x] == '#')
-            {
-                wall.x = (x + off.x) * MM_SIZE;
-                wall.y = (y + off.y) * MM_SIZE;
-                SDL_RenderDrawRect(renderer, &wall);
-            }
-        }
+    int num_polys = gptr -> map -> size;
+    Polygon poly;
+    for (size_t i = 0; i < num_polys; i++) {
+      poly = world[i];
+      for (size_t j = 0; j < poly.n; j++) {
+          SDL_RenderDrawLine(renderer,
+                              (int) (poly.points[j].x * MM_SIZE),
+                              (int) (poly.points[j].y * MM_SIZE),
+                              (int) (poly.points[(j+1) % poly.n].x * MM_SIZE),
+                              (int) (poly.points[(j+1) % poly.n].y * MM_SIZE));
+      }
     }
+
 
     Player me = *(gptr -> me);
     me.pos = addc(me.pos, off);
@@ -49,7 +46,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
     SDL_SetRenderDrawColor(renderer, 255,     255,  0,  128);
 
     // only draw every 20th ray to save on CPU
-    for (int i = 0; i < WINDOW_WIDTH; i += 5)
+    for (int i = 0; i < WINDOW_WIDTH; i += 20)
     {
         SDL_RenderDrawLine(renderer, (int) (me.pos.x * MM_SIZE),
                                      (int) (me.pos.y * MM_SIZE),

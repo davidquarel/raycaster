@@ -19,13 +19,19 @@ inline double euclid_dist(Coord p, Coord q)
 
 inline Coord addc(Coord p, Coord q)
 {
-    Coord new ={.x = p.x + q.x, .y = p.y + q.y};
+    Coord new = {p.x + q.x, p.y + q.y};
     return new;
 }
 
 inline Coord subc(Coord p, Coord q)
 {
-    Coord new ={.x = p.x - q.x, .y = p.y - q.y};
+    Coord new = {p.x - q.x, p.y - q.y};
+    return new;
+}
+
+inline Coord mulc(Coord p, double c)
+{
+    Coord new = {p.x * c, p.y*c};
     return new;
 }
 
@@ -41,7 +47,7 @@ inline Coord rotatec(Coord p, double theta)
 // shift to origin, rotate about origin, shift back
 inline Coord rotate_about(Coord q, Coord p, double theta)
 {
-  
+
     Coord new = addc(rotatec(subc(q,p),theta), p);
     return new;
 }

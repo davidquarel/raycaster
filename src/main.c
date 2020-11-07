@@ -19,27 +19,33 @@
 int main(void) //int argc, char** argv)
 {
     // begin init section
+    Coord penta_point[5] = {{5.00,3.00},{4.96,1.89},{3.86,1.63},{3.23,2.69},{3.97,3.26}};
+    Polygon pentagon =
+      {.points = penta_point,
+      .n = 5};
 
-    World world  =   "##################################################"
-                     "#                                                #"
-                     "#       ##   #       #          #                #"
-                     "#                         #             #    #   #"
-                     "#   #                               #            #"
-                     "#            #     ##                            #"
-                     "#      #           #     #                   #   #"
-                     "#          #                            #        #"
-                     "#                    #            #          #   #"
-                     "#    #                                      #    #" 
-                     "#             ##        #                        #"
-                     "#     ##                              #      #   #"
-                     "#                 #                          #   #"
-                     "#       ###             ##     #             #  ##"
-                     "#                                            #    "
-                     "##################################################";
+    Coord cresent_points[8] = {{6.18,2.58},{6.92,2.88},{6.90,1.78},{6.06,1.95},
+      {6.23,1.27},{7.91,1.95},{7.79,2.94},{6.31,3.28}};
+    Polygon cresent =
+    {.points = cresent_points,
+      .n = 8};
 
-    Map map =   {.width = 50,
-                 .height = 16,
-                 .world = world};
+    Coord tri_points[3] = {{6.01,3.81},{2.89,3.76},{4.09,5.45}};
+    Polygon triangle =
+    {.points = tri_points,
+      .n = 3};
+
+    Coord boundary[4] = {{0.0,0.0},{10.0,0.0},{10.0,10.0},{0.0,10.0}};
+    Polygon box =
+    {.points = boundary,
+    .n = 4};
+
+    Polygon polys[4] = {pentagon, cresent, triangle, box};
+
+    Map map = { .world = polys,
+                .size = 4,
+                .width = 10,
+                .height = 10};
 
     Player me = {.pos = {.x = 1.5, .y = 1.5},
                  .theta = PI/6.0,
@@ -95,15 +101,9 @@ int main(void) //int argc, char** argv)
     // end init section
 
     uint32_t textures[256][256];
-
     FILE* jon_ppm = fopen("img/jon_P6.ppm", "rb");
-    
     read_ppm_to_textures(jon_ppm, textures);
-    //init_xor_texture(&game, textures);
-    
-    
-    //SDL_Color jon[256][256];
-    //init_texture_from_file(&game, jon, )
+
 
     while(game.run)
     {
@@ -113,24 +113,26 @@ int main(void) //int argc, char** argv)
         move_player(&game, MOVE_SPEED, TURN_SPEED);
         //Render the game
         draw_background(renderer, &game);
+        //draw_polywalls(renderer, &game, rays, textures);
+
         draw_walls(renderer, &game, rays, textures);
 
         if(game.mm_toggle)
             draw_minimap(renderer, &game, rays);
-	    
+
         //printf("%s\n", status_buf);
         if(game.status_toggle)
         {
             print_game_status(&game, status_buf);
             draw_status(renderer, stat_surf, font, &game, status_buf);
         }
-            
+
         // update screen
         SDL_RenderPresent(renderer);
-	
+
 
         //Busy waits are for bricks
-        //Sleeps for remaining 1/60th of a second, or just sends it if it's behind	
+        //Sleeps for remaining 1/60th of a second, or just sends it if it's behind
         double end = clock();
 
         // if computed in under 1/60 of a second
@@ -139,16 +141,16 @@ int main(void) //int argc, char** argv)
             //	printf("Yeet %f \n",(end-start)/CLOCKS_PER_SEC);
             const struct timespec sleeptime = {0, max(0,16777777L - ((long)((end-start) * 1000)))};
             //	const struct timespec sleeptime = {0, 16777777L};
-            nanosleep(&sleeptime, NULL); 
+            nanosleep(&sleeptime, NULL);
             game.fps = 60;
         }
         else
         {
             game.fps =  CLOCKS_PER_SEC / (end - start);
         }
-        
 
-	
+
+
     }
     // test for quit
     SDL_DestroyRenderer(renderer);
