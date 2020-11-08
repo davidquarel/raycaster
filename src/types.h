@@ -52,11 +52,13 @@ typedef struct {
     double fps;
 } Game;
 
-typedef enum Direction {NORTH, EAST, SOUTH, WEST} Direction;
+// typedef enum Direction {NORTH, EAST, SOUTH, WEST} Direction;
 
 typedef struct {
     Coord pos;
-    Direction dir;
+    //  Direction dir;   DEPRICATED
+    double t;       // distance to target
+    double lambda;  // fraction along wall struck
 } Rayhit;
 
 // used to push entire pixels into framebuffer quickll,

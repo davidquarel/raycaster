@@ -2,7 +2,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdio.h>
-
+#include <assert.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 // #include <SDL2/SDL_image.h>

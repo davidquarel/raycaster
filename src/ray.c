@@ -22,6 +22,7 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
     double det;                     // determinant in ray equation
     Coord hit;                      // where ray strikes wall
     double tbest = 1e10;
+    double lambdabest = 0.5;
 
     Polygon* world = map -> world;
 
@@ -39,14 +40,17 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
         lambda  = (v.x*(q.y-u.y) - v.y*(q.x-u.x))/det;
         t       = ((q.y - p.y)*(q.x-u.x) + (p.x-q.x)*(q.y-u.y))/det;
         // only count ray collision forwards, and within line segment
-        if(t >= 0 && 0 <= lambda && lambda <= 1)
-          tbest = MIN(t, tbest);
+        if(t >= 0 && t < tbest && 0 <= lambda && lambda <= 1)
+        {
+            tbest = t;
+            lambdabest = lambda;
+        }
 
 
       }
     }
-    hit = addc(u, mulc(v,tbest));
-
-    ray.pos = hit;
+    ray.pos = addc(u, mulc(v,tbest));
+    ray.t = tbest;
+    ray.lambda = lambdabest;
     return ray;
 }
