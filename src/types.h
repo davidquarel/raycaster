@@ -56,7 +56,7 @@ typedef struct {
 
 typedef struct {
     Coord pos;
-    //  Direction dir;   DEPRICATED
+    double texture_frac; //distance along current texture block
     double t;       // distance to target
     double lambda;  // fraction along wall struck
 } Rayhit;

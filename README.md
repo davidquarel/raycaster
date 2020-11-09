@@ -39,8 +39,13 @@ Compile with `make`, then run `./bin/ray`.
 * ~~Algorithm to cast rays is inefficient, and takes little 0.01 steps
 forward till it hits a wall. Use Bresenhams line algorithm and some
 maths to make it fast.~~ DONE
-* New faster raycasting algorithm seems to still have some minor
-distortion after correcting for fisheye effect. Investigate cause and fix.
+* ~~New faster raycasting algorithm seems to still have some minor
+distortion after correcting for fisheye effect. Investigate cause and fix.~~ DONE, cause was
+that the angle between each ray cast needs to be chosen such that ray hits are spaced equally
+apart on a wall perpendicular to the direction the player is viewing, not just spacing the
+angle of the rays equally (as otherwise many rays are cast close to straight ahead, and
+few rays are cast in the peripherals).
+* Replace the above distortion correction with a lookup table. No sense redoing work.
 * Make movement adjust player acceleration rather than velocity, and add friction
  so player movement feels more natural as compared to abrupt movement.
 * ~~Game only updates where you hit WASD or LEFT/RIGHT. Eventually want
@@ -51,14 +56,23 @@ DONE
 walls are less boring.~~ ~~Done, but it needs to be more efficient.~~ DONE
 * ~~Don't draw walls outside view area.~~ Done? Needs to be verified.
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
-* ~~Add collisions with walls~~ DONE
-* Change the format for texture mapping rather than reinventing the wheel.
+* ~~Add collisions with walls~~ DONE 
+* Add collisions with the new polygonal walls.
+* Change the format for texture mapping rather than reinventing the wheel. Work out why some textures
+have pink/green static.
 * Change the format of the map to have different kinds of walls that are
 texture mapped in different ways.
 * Adjust collision behaviour so you walk along a wall rather than
 stopping immediately when you touch a wall.
+* ~~Replace a boring grid of squares with walls that can be arbitrary polygons.~~ DONE, but it's inefficient,
+and each ray checks for collision with every edge of every polygon.
+* Profiling the code, most time is wasted on calls to SDL. Investigate why and fix.
 
 # TODO Someday
+* Partition the map with quadtrees or some other clever data structure to make
+ray-polygon intersections faster to compute. Could place circles around groups of nearby polygons,
+and check circle-ray intersection, which is cheap and easy, by using a perpindicular line that
+intersects the center of the circle.
 * Add something for the player to interact with (items, monsters)
 * Texture map the sky and the floor.
 * Make some interesting maps, refactor to allow different levels to

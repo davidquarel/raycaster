@@ -24,6 +24,9 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
     double tbest = 1e10;
     double lambdabest = 0.5;
 
+    Coord pbest;
+    Coord qbest;
+
     Polygon* world = map -> world;
 
     // for all polygons
@@ -44,11 +47,15 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
         {
             tbest = t;
             lambdabest = lambda;
+            pbest = p;
+            qbest = q;
         }
 
 
       }
     }
+    double dist_edge = lambdabest * euclid_dist(pbest,qbest);
+    ray.texture_frac = dist_edge - floor(dist_edge);
     ray.pos = addc(u, mulc(v,tbest));
     ray.t = tbest;
     ray.lambda = lambdabest;

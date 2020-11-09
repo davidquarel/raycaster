@@ -46,7 +46,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
     SDL_SetRenderDrawColor(renderer, 255,     255,  0,  128);
 
     // only draw every 20th ray to save on CPU
-    for (int i = 0; i < WINDOW_WIDTH; i += 20)
+    for (int i = 0; i < WINDOW_WIDTH; i += 50)
     {
         SDL_RenderDrawLine(renderer, (int) (me.pos.x * MM_SIZE),
                                      (int) (me.pos.y * MM_SIZE),

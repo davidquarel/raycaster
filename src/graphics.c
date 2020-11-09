@@ -76,7 +76,7 @@ void draw_walls(SDL_Renderer* renderer,
     const int TEX_WIDTH = gptr -> texture_width;
     const int TEX_HEIGHT = gptr -> texture_height;
     Player me = *(gptr -> me);
-	const double theta_inc = me.fov / WINDOW_WIDTH;
+	  // const double theta_inc = me.fov / WINDOW_WIDTH;
 
     SDL_Texture* walls = SDL_CreateTexture
         (
@@ -102,13 +102,17 @@ void draw_walls(SDL_Renderer* renderer,
 		double y_top;
 	}Walldata;
 
+  double d = 1/(2 * tan(me.fov/2)); //distance to unit length wall
+                                    //subtending entire view
+
+  double ray_thetas[WINDOW_WIDTH];
+
 	for (int x = 0; x < WINDOW_WIDTH; x++)
   {
-		rays[x] = cast_ray(me.pos, ray_theta, gptr -> map);
-		ray_theta += theta_inc; //move theta for next ray to cast
+    double scan_frac = ((double) x) / WINDOW_WIDTH; //how far current x val is across screen
+    ray_thetas[x] = me.theta - atan((0.5 - scan_frac)/d); //calculate angle to space rays evenly
+		rays[x] = cast_ray(me.pos, ray_thetas[x], gptr -> map);
   }
-
-	ray_theta = (me.theta) - (me.fov / 2); //reset starting ray angle
 
 	for (int x = 0; x < WINDOW_WIDTH; x++)
     {
@@ -116,14 +120,11 @@ void draw_walls(SDL_Renderer* renderer,
 		Walldata cur_wall;
 
 		cur_wall.distance = cur_ray.t;
-		cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_theta - me.theta)));
-
-		ray_theta += theta_inc; //move theta for next ray to cast
+		cur_wall.height = WINDOW_HEIGHT * (1 / (cur_wall.distance * cos(ray_thetas[x] - me.theta)));
 
 		cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
 		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
-    double lambda = cur_ray.lambda;
-    assert(0 <= lambda && lambda < 1);
+    double lambda = cur_ray.texture_frac;
 	  cur_wall.texture_x = (int) (TEX_WIDTH * lambda);
 
 

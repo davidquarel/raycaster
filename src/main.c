@@ -101,7 +101,7 @@ int main(void) //int argc, char** argv)
     // end init section
 
     uint32_t textures[256][256];
-    FILE* jon_ppm = fopen("img/jon_P6.ppm", "rb");
+    FILE* jon_ppm = fopen("img/brick.ppm", "rb");
     read_ppm_to_textures(jon_ppm, textures);
 
 
