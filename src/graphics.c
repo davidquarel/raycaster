@@ -92,8 +92,6 @@ void draw_walls(SDL_Renderer* renderer,
     // for (int i=0; i < WINDOW_HEIGHT * WINDOW_WIDTH; i++)
     //     frame_buf[i] = 0;
 
-    double ray_theta = (me.theta) - (me.fov / 2); //set starting ray angle
-
 	typedef struct {
 		uint32_t texture_x;
 		double distance;
@@ -124,7 +122,8 @@ void draw_walls(SDL_Renderer* renderer,
 
 		cur_wall.y_bot = (WINDOW_HEIGHT - cur_wall.height)/2;
 		cur_wall.y_top = (WINDOW_HEIGHT + cur_wall.height)/2;
-    double lambda = cur_ray.texture_frac;
+    double dist_edge = cur_ray.lambda * euclid_dist(cur_ray.e1, cur_ray.e2);
+    double lambda = dist_edge - floor(dist_edge);
 	  cur_wall.texture_x = (int) (TEX_WIDTH * lambda);
 
 

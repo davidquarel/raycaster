@@ -10,7 +10,6 @@
 
 Rayhit cast_ray(Coord pos, double theta, Map* map)
 {
-    int WORLD_WIDTH  = map -> width;
 
     Rayhit ray;
     Coord u = pos; //ray origin
@@ -20,12 +19,11 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
     double t;                       // ray has equation u + tv
     double lambda;                  // how far along edge ray strikes
     double det;                     // determinant in ray equation
-    Coord hit;                      // where ray strikes wall
     double tbest = 1e10;
     double lambdabest = 0.5;
 
-    Coord pbest;
-    Coord qbest;
+    Coord pbest = {-1,-1};
+    Coord qbest= {-1,-1};
 
     Polygon* world = map -> world;
 
@@ -54,9 +52,11 @@ Rayhit cast_ray(Coord pos, double theta, Map* map)
 
       }
     }
-    double dist_edge = lambdabest * euclid_dist(pbest,qbest);
-    ray.texture_frac = dist_edge - floor(dist_edge);
-    ray.pos = addc(u, mulc(v,tbest));
+    // double dist_edge = lambdabest * euclid_dist(pbest,qbest);
+    // ray.texture_frac = dist_edge - floor(dist_edge);
+    ray.e1  = pbest;
+    ray.e2  = qbest;
+    ray.pos = addc(u, mulc(tbest,v));
     ray.t = tbest;
     ray.lambda = lambdabest;
     return ray;

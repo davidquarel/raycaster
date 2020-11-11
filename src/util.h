@@ -10,7 +10,8 @@ int max(int a, int b);
 double euclid_dist(Coord p, Coord q);
 Coord addc(Coord p, Coord q);  // add coords
 Coord subc(Coord p, Coord q);  // sub coords
-Coord mulc(Coord p, double c); //scalar multiply coord
+Coord mulc(double c, Coord p); //scalar multiply coord
 Coord rotatec(Coord p, double theta); // rotate by theta about origin
 Coord rotate_about(Coord q, Coord p, double theta); //rotate q about p by theta
+double dot(Coord p, Coord q); //eucledian dot product
 #endif

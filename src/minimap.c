@@ -6,9 +6,7 @@ void draw_minimap(SDL_Renderer* renderer, Game* gptr, Rayhit* rays)
 {
     //enable transparancy
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-
-    int WORLD_WIDTH = gptr -> map -> width;
-    int WORLD_HEIGHT = gptr -> map -> height;
+    
     int WINDOW_WIDTH = gptr -> window_width;
 
     int MM_SIZE = gptr -> mm_size; //minimap scaling factor

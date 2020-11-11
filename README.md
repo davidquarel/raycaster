@@ -53,17 +53,20 @@ it to run at 30/60fps, and you hold WASD to constantly move in that direction.~~
 DONE
 * Add mouselook.
 * ~~Learn how to and then implement texture mapping.~~ ~~Grey walls are boring~~ ~~Stripey
-walls are less boring.~~ ~~Done, but it needs to be more efficient.~~ DONE
-* ~~Don't draw walls outside view area.~~ Done? Needs to be verified.
+walls are less boring.~~ ~~Done, but it needs to be more efficient.~~ DONE, but most of the code time is on SDL stuff. 
+Work out why and make it run faster,
+* ~~Don't draw walls outside view area.~~ Done? ~~Needs to be verified.~~ DONE
 * ~~Add the ability for the minimap to draw the rays that have been cast~~ DONE
 * ~~Add collisions with walls~~ DONE 
-* Add collisions with the new polygonal walls.
+* ~~Add collisions with the new polygonal walls.~~ DONE, slide along walls using vector projection.
+Only works well for convex polygons, as it's possible to walk through corners with reflex angles.
+Work out why, and fix it.
 * Change the format for texture mapping rather than reinventing the wheel. Work out why some textures
 have pink/green static.
 * Change the format of the map to have different kinds of walls that are
 texture mapped in different ways.
-* Adjust collision behaviour so you walk along a wall rather than
-stopping immediately when you touch a wall.
+* ~~Adjust collision behaviour so you walk along a wall rather than
+stopping immediately when you touch a wall.~~ DONE, but can walk throguh reflex angles for polygon walls.
 * ~~Replace a boring grid of squares with walls that can be arbitrary polygons.~~ DONE, but it's inefficient,
 and each ray checks for collision with every edge of every polygon.
 * Profiling the code, most time is wasted on calls to SDL. Investigate why and fix.

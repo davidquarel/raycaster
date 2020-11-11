@@ -56,9 +56,11 @@ typedef struct {
 
 typedef struct {
     Coord pos;
-    double texture_frac; //distance along current texture block
+    //double texture_frac; //distance along current texture block
     double t;       // distance to target
     double lambda;  // fraction along wall struck
+    Coord e1;      // start point of edge struck
+    Coord e2;      // end point of edge struck
 } Rayhit;
 
 // used to push entire pixels into framebuffer quickll,

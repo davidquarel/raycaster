@@ -29,7 +29,13 @@ inline Coord subc(Coord p, Coord q)
     return new;
 }
 
-inline Coord mulc(Coord p, double c)
+inline double dot(Coord p, Coord q)
+{
+    return p.x*q.x + p.y*q.y;
+}
+
+
+inline Coord mulc(double c, Coord p)
 {
     Coord new = {p.x * c, p.y*c};
     return new;
