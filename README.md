@@ -68,3 +68,6 @@ be loaded from a file.
 * Add support for sprites to draw the player and things in the world.
 * Add multiplayer mode (split screen? multiple SDL windows?)
 * Add network support for multiplayer over LAN
+
+This branch is where the old version of the code using a square grid world will
+remain. From here on out, we will be using a wordl that supports arbitrary polygons.
