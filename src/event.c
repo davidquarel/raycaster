@@ -3,7 +3,9 @@
 #include "util.h"
 #include <stdint.h>
 
-// Processes all SDL events in queue - the idea here is that 
+#define MAP_SCALE 1.5
+
+// Processes all SDL events in queue - the idea here is that
 // the function is called once
 // per game frame, to handle *all* user input for that frame
 void check_event(SDL_Event* eventptr, Game* gptr)
@@ -20,7 +22,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
 
             case SDL_KEYUP:
 		        break;
-            
+
             //Handle keypresses
             case SDL_KEYDOWN:
                 key_press(eventptr, gptr, event.key.keysym.scancode);
@@ -33,7 +35,7 @@ void check_event(SDL_Event* eventptr, Game* gptr)
             case SDL_TEXTINPUT:	//Trap for 771
 	    case SDL_WINDOWEVENT: //Trap for 512
                 break;
-            
+
             default:
 	            printf("event.c: Unexpected SDL Event type %d\n",event.type); //quality debug
                 break;
@@ -66,12 +68,14 @@ void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode)
 
         // increase minimap size
         case SDL_SCANCODE_K:
-            gptr -> mm_size *= 2;
+            gptr -> mm_size *= MAP_SCALE;
+            gptr -> mm_offset = addc(mulc(1-MAP_SCALE, gptr -> me -> pos), gptr -> mm_offset);
             break;
 
         // decrease minimap size
         case SDL_SCANCODE_L:
-            gptr -> mm_size = max(5, (gptr -> mm_size) / 2);
+            gptr -> mm_size = max(5, (gptr -> mm_size) / MAP_SCALE);
+            //gptr -> mm_offset = addc(mulc(1-MAP_SCALE, gptr -> me -> pos), gptr -> mm_offset);
             break;
 
         // toggle printing debug info to screen
@@ -81,27 +85,25 @@ void key_press(SDL_Event* eventptr, Game* gptr, SDL_Scancode scancode)
 
         // translate minimap up
         case SDL_SCANCODE_KP_8:
-            gptr -> mm_offset.y -= 20.0 / (gptr -> mm_size);
+            gptr -> mm_offset.y -= MAP_SCALE *10;
             break;
-        
+
         // translate minimap down
-        case SDL_SCANCODE_KP_5:
-            gptr -> mm_offset.y += 20.0 / (gptr -> mm_size);
+        case SDL_SCANCODE_KP_2:
+            gptr -> mm_offset.y += MAP_SCALE *10 ;
             break;
-        
+
         // translate minimap left
         case SDL_SCANCODE_KP_4:
-            gptr -> mm_offset.x -= 20.0 / (gptr -> mm_size);
+            gptr -> mm_offset.x -= MAP_SCALE * 10;
             break;
-        
+
         // translate minimap right
         case SDL_SCANCODE_KP_6:
-            gptr -> mm_offset.x += 20.0 / (gptr -> mm_size);
+            gptr -> mm_offset.x += MAP_SCALE * 10;
             break;
 
         default:
             break;
     }
 }
-
-
